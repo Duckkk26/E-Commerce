@@ -1,0 +1,137 @@
+.header {
+    left: 50%;
+    position: fixed;
+    top: 0;
+    transform: translateX(-50%);
+    width: 100%;
+    background-color: #d70018;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+    z-index: 1000;
+    display: block;
+}
+
+.nav-container {
+    box-sizing: border-box;
+    display: block;
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+    width: 1200px;
+}
+
+.navbar {
+    align-items: center;
+    display: flex;
+    height: 64px;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+}
+
+.nav-brand {
+    align-items: stretch;
+    display: flex;
+    flex-shrink: 0;
+    min-height: 3.25rem;
+    color: white;
+    align-items: center;
+    flex-grow: 0;
+    flex-shrink: 0;
+    line-height: 1.5;
+    padding: .5rem .75rem;
+    position: relative;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.header-item {
+    align-items: center;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    height: 42px;
+    padding: 3px 5px;
+    position: relative;
+    text-decoration: none !important;
+}
+
+.header .nav-container .navbar .header-item .box-icon {
+    color: #fff;
+    margin-right: 5px;
+}
+
+.header .nav-container .navbar .header-item .box-content {
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.btn-menu {
+    background: hsla(0, 0%, 100%, .2);
+}
+
+.header .nav-container .navbar .header-item.btn-menu .box-icon {
+    align-items: center;
+    display: flex;
+}
+
+.header .nav-container .navbar .header-item.btn-menu .box-content {
+    line-height: 1;
+    width: 60px;
+}
+
+.box-search {
+    float: left;
+    margin: 0 10px 0 0;
+    width: 300px;
+}
+
+.box-search form {
+    box-sizing: border-box;
+    position: relative;
+}
+
+.box-search form .group-input {
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex !important;
+}
+
+.box-search form .group-input .input-btn button {
+    background-color: #fff;
+    border: 0;
+    border-radius: 10px 0 0 10px;
+    box-sizing: border-box;
+    color: #707070;
+    height: 34px;
+}
+
+.box-search form .group-input .input-btn button svg {
+    font-size: 18px;
+}
+
+.box-search form .group-input .input {
+    border: 0;
+    border-radius: 0 10px 10px 0;
+    font-size: 16px;
+    height: 34px;
+    outline: none;
+    padding: .5rem 2rem .5rem .6rem;
+    width: 100%;
+}
+
+.box-search form .group-input #close-search-btn {
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: 600;
+    height: 26px;
+    line-height: 1;
+    position: absolute;
+    right: 10px;
+    top: 45%;
+    transform: translateY(-50%);
+    z-index: 31;
+    font-style: inherit;
+}
