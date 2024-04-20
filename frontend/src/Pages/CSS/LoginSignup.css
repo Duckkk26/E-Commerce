@@ -59,6 +59,11 @@
     font-weight: 600;
 }
 
+.loginsignup-login span:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .loginsignup-agree {
     display: flex;
     align-items: center;

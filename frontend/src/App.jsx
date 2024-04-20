@@ -13,7 +13,6 @@ import men_banner from './Components/Assets/banner_mens.png'
 import women_banner from './Components/Assets/banner_women.png'
 import kid_banner from './Components/Assets/banner_kids.png'
 
-
 function App() {
   return (
     <>
@@ -25,7 +24,7 @@ function App() {
           <Route path='/tablet' element={<ShopCategory category="women" banner={women_banner} />} />
           <Route path='/laptop' element={<ShopCategory category="kid" banner={kid_banner} />} />
           <Route path='/personal-computer' element={<ShopCategory category="PC" /> } />
-          <Route path='product' element={<Product />}>
+          <Route path='/product' element={<Product />}>
             <Route path=':productId' element={<Product />} />
           </Route>
           <Route path='/cart' element={<Cart />} />

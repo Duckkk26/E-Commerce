@@ -97,8 +97,14 @@ function Navbar() {
                     <span id="items-in-cart">{getTotalItems()}</span>
                 </div>
             </Link>
-            <Link to='/login'>
-                <div className="login-btn">
+            {localStorage.getItem('auth-token')
+                ?<div 
+                    className="login-btn"
+                    onClick={() => {
+                        localStorage.removeItem('auth-token');
+                        window.location.replace('/');
+                    }}
+                >
                     <div className="header-item about-member">
                         <div className="box-icon">
                             <div className="my-icon">
@@ -106,11 +112,25 @@ function Navbar() {
                             </div>
                         </div>
                         <div className="box-content">
-                            <span className="title">Đăng nhập</span>
+                            <span className="title">Đăng xuất</span>
                         </div>
                     </div>
                 </div>
-            </Link>
+                :<Link to='/login'>
+                    <div className="login-btn">
+                        <div className="header-item about-member">
+                            <div className="box-icon">
+                                <div className="my-icon">
+                                    <FontAwesomeIcon icon={faCircleUser} className='avatar' />
+                                </div>
+                            </div>
+                            <div className="box-content">
+                                <span className="title">Đăng nhập</span>
+                            </div>
+                        </div>
+                    </div>
+                </Link>
+            }            
         </div>
     </div>
   )
