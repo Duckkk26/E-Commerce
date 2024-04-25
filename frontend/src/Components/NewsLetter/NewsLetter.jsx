@@ -1,11 +1,12 @@
 import React from 'react'
+
 import './NewsLetter.css'
 
 function NewsLetter() {
   return (
     <div className='newsletter'>
-        <h1>Get Exclusive Offers On Your Email</h1>
-        <p>Subcribe to our newsletter and stay updated</p>
+        <h1>Đăng ký nhận tin khuyến mãi</h1>
+        <p>(*) Nhận ngay voucher 10%</p>
         <div>
             <input type="email" placeholder='Your Email' />
             <button>Subcribe</button>

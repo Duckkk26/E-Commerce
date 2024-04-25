@@ -6,6 +6,13 @@
     gap: 30px;
 }
 
+.footer hr {
+    width: 100%;
+    background-color: #ebebeb;
+    height: 1px;
+    border: none;
+}
+
 .footer-logo {
     display: flex;
     align-items: center;
@@ -64,6 +71,7 @@
 @media (max-width: 800px) {
     .footer {
         gap: 20px;
+        padding-bottom: 80px;
     }
 
     .footer-logo {

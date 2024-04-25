@@ -1,5 +1,5 @@
 .newsletter {
-    width: 65%;
+    width: 100%;
     height: 350px;
     display: flex;
     flex-direction: column;
@@ -8,7 +8,7 @@
     margin: auto;
     padding: 0 140px;
     margin-bottom: 150px;
-    background: linear-gradient(180deg, #fde1ff, #e1ffea22 60%);
+    background: linear-gradient(180deg, #ffd1d7, #e1ffea22 60%);
     gap: 30px;
 }
 
@@ -19,7 +19,7 @@
 }
 
 .newsletter p {
-    color: #454545;
+    color: #d70018;
     font-size: 20px;
 }
 
@@ -47,10 +47,11 @@
     width: 210px;
     height: 70px;
     border-radius: 80px;
-    background: black;
+    background: #d70018;
     color: white;
     font-size: 16px;
     cursor: pointer;
+    border: none;
 }
 
 @media (max-width: 1200px) {
@@ -86,6 +87,7 @@
 @media (max-width: 1024px) {
     .newsletter {
         margin-bottom: 60px;
+        height: 300px;
     }
 
     .newsletter h1 {
@@ -116,7 +118,7 @@
 @media (max-width: 800px) {
     .newsletter {
         margin-bottom: 30px;
-        height: 280px;
+        height: 200px;
     }
 
     .newsletter h1 {
@@ -144,9 +146,9 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 540px) {
     .newsletter {
-        height: 200px;
+        height: 150px;
         width: 100%;
         padding: 0;
         gap: 15px;

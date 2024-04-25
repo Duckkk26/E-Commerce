@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+
 import './CSS/LoginSignup.css'
+import MenuBottomTabs from '../Components/MenuBottomTabs/MenuBottomTabs';
 
 function LoginSignup() {
   const [state, setState] = useState("Login");
@@ -60,33 +62,36 @@ function LoginSignup() {
   };
 
   return (
-    <div className='loginsignup'>
-      <div className="loginsignup-container">
-        <h1>{state}</h1>
-        <div className="loginsignup-fields">
-          {state === "Sign Up" ? <input name='username' value={formData.username} onChange={(e) => handleChange(e)} type="text" placeholder='Username' /> :  <></>}
-          <input name='email' value={formData.email} onChange={(e) => handleChange(e)} type="text" placeholder='Email Address' />
-          <input name='password' value={formData.password} onChange={(e) => handleChange(e)} type="password" placeholder='Password' />
-        </div>
-        <button onClick={() => {
-          state ==="Login" ? login() : signup();
-        }}>
-          Continue
-        </button>
-        {state === "Sign Up" ? <p className="loginsignup-login">Already have an account?&nbsp;
-                                  <span onClick={() => setState("Login")}>Login here</span>
+    <>
+      <div className='loginsignup'>
+        <div className="loginsignup-container">
+          <h1>{state}</h1>
+          <div className="loginsignup-fields">
+            {state === "Sign Up" ? <input name='username' value={formData.username} onChange={(e) => handleChange(e)} type="text" placeholder='Username' /> :  <></>}
+            <input name='email' value={formData.email} onChange={(e) => handleChange(e)} type="text" placeholder='Email Address' />
+            <input name='password' value={formData.password} onChange={(e) => handleChange(e)} type="password" placeholder='Password' />
+          </div>
+          <button onClick={() => {
+            state ==="Login" ? login() : signup();
+          }}>
+            Continue
+          </button>
+          {state === "Sign Up" ? <p className="loginsignup-login">Already have an account?&nbsp;
+                                    <span onClick={() => setState("Login")}>Login here</span>
+                                  </p> : 
+                                  <></>}
+          {state === "Login" ? <p className="loginsignup-login">Create an account?&nbsp;
+                                  <span onClick={() => setState("Sign Up")}>Sign up here</span>
                                 </p> : 
                                 <></>}
-        {state === "Login" ? <p className="loginsignup-login">Create an account?&nbsp;
-                                <span onClick={() => setState("Sign Up")}>Sign up here</span>
-                              </p> : 
-                              <></>}
-        <div className="loginsignup-agree">
-          <input type="checkbox" name="" id="" />
-          <p>By continuing, I agree to the Terms of Use and Privacy Policy.</p>
+          <div className="loginsignup-agree">
+            <input type="checkbox" name="" id="" />
+            <p>By continuing, I agree to the Terms of Use and Privacy Policy.</p>
+          </div>
         </div>
       </div>
-    </div>
+      <MenuBottomTabs active={'Login'} />
+    </>
   )
 }
 

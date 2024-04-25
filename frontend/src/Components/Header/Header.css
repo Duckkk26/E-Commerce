@@ -6,7 +6,3 @@
     display: block;
     position: fixed;
 }
-
-.header * {
-    box-sizing: inherit;
-}

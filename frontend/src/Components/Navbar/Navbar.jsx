@@ -1,14 +1,18 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
+import { Link } from 'react-router-dom'
+
+// Import Context and Components
+import { ShopContext } from '../../Context/ShopContext'
+import MenuTree from '../MenuTree/MenuTree'
+
+// Import CSS file
 import './Navbar.css'
+
+// Import icons from Assets and FontAwesomeIcon
 import logo from '../Assets/logo.png'
-// import cart_icon from '../Assets/cart_icon.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBagShopping, faBars, faPhone, faSearch, faTruckFast, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons'
-import { useState } from 'react'
-import MenuTree from '../MenuTree/MenuTree'
-import { Link } from 'react-router-dom'
-import { ShopContext } from '../../Context/ShopContext'
 
 function Navbar() {
     const [isMenu, setIsMenu] = useState(false);
@@ -36,7 +40,9 @@ function Navbar() {
                     <p>Danh mục</p>
                 </div>
             </a>
-            {isMenu && <MenuTree onMenuItemClick={handleMenu} />}
+            <div className="menu-container">
+                {isMenu && <MenuTree onMenuItemClick={handleMenu} />}
+            </div>
             <div className="box-search">
                 <form>
                     <div className="group-input">

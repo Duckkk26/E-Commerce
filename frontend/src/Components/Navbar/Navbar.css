@@ -176,6 +176,15 @@
     height: 20px;
 }
 
+.menu-container {
+    position: absolute;
+    top: 70px;
+    left: 10px;
+    max-width: 1200px;
+    width: 100%;
+    z-index: 31;
+}
+
 @media only screen and (max-width: 1200px) {
     .nav-container {
         max-width: 1200px !important;

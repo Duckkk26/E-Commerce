@@ -17,6 +17,7 @@ code {
 
 * {
   margin: 0;
+  box-sizing: inherit;
 }
 
 a {
@@ -33,4 +34,18 @@ form {
 
 button, input, select, textarea {
   margin: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+p {
+  margin: 0;
+  padding: 0;
 }
