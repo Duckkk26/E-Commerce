@@ -5,7 +5,7 @@ const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
 const { type } = require('os');
-const { error } = require('console');
+const { v4: uuidv4 } = require('uuid')
 
 require('dotenv').config();
 
@@ -28,7 +28,8 @@ app.get("/", (req, res) => {
 const storage = multer.diskStorage({
     destination: './upload/images',
     filename: (req, file, cb) => {
-        return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+        const uniqueFilename = `${uuidv4()}${path.extname(file.originalname)}`;
+        return cb(null, uniqueFilename);
     }
 });
 
@@ -37,10 +38,11 @@ const upload = multer({storage: storage});
 // Creating upload endpoint for images
 app.use('/images', express.static('upload/images'));
 
-app.post("/upload", upload.single('product'), (req, res) => {
+app.post("/upload", upload.array('product'), (req, res) => {
+    const fileNames = req.files.map(file => file.filename);
     res.status(200).json({
         success: 1,
-        image_url: `http://localhost:${port}/images/${req.file.filename}`
+        image_urls: fileNames.map(filename => `http://localhost:${port}/images/${filename}`)
     });
 });
 
@@ -54,13 +56,16 @@ const Product = mongoose.model("Product", {
         type: String,
         required: true
     },
-    image: {
-        type: String,
+    images: {
+        type: Object,
         required: true
     },
     category: {
         type: String,
         required: true
+    },
+    brand: {
+        type: String,
     },
     new_price: {
         type: Number,
@@ -70,13 +75,24 @@ const Product = mongoose.model("Product", {
         type: Number,
         required: true
     },
+    description: {
+        type: String,
+        required: true
+    },
+    label: {
+        type: String
+    },
+    quantity: {
+        type: Number,
+        default: 0
+    },
+    sold: {
+        type: Number,
+        default: 0
+    },
     date: {
         type: Date,
         default: Date.now
-    },
-    available: {
-        type: Boolean,
-        default: true
     }
 });
 
@@ -94,10 +110,14 @@ app.post('/addProduct', async (req,res) => {
     const product = new Product({
         id: id,
         name: req.body.name,
-        image: req.body.image,
+        images: req.body.images,
         category: req.body.category,
+        brand: req.body.brand,
         new_price: req.body.new_price,
-        old_price: req.body.old_price
+        old_price: req.body.old_price,
+        description: req.body.description,
+        label: req.body.label,
+        quantity: req.body.quantity
     });
     await product.save();
     res.json({
@@ -123,17 +143,20 @@ app.get('/allProducts', async (req, res) => {
 
 // API for new collection data
 app.get('/newCollections', async (req, res) => {
-    let products = await Product.find({})
-    let newCollections = products.slice(1).slice(-8);
+    let newCollections = await Product.find({label: "new"})
     res.send(newCollections);
 });
 
-// API for popular in women
-app.get('/popularInWomen', async (req, res) => {
-    let products = await Product.find({category: "women"});
-    let popularProducts = products.slice(0, 4);
-    res.send(popularProducts);
-});
+// API for popular in a category
+const categories = ['Mobile', 'Tablet', 'Laptop', 'PersonalComputer'];
+
+categories.forEach((category) => {
+    app.get(`/popularIn${category}`, async (req, res) => {
+        let products = await Product.find({category: `${category}`, label: "popular"});
+        let popularProducts = products;
+        res.send(popularProducts);
+    });
+})
 
 // Create schema for user model
 const User = mongoose.model('User', {
