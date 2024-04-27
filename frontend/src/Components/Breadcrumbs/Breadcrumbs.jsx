@@ -1,16 +1,50 @@
 import React from 'react'
-import './Breadcrumbs.css'
-import arrow_icon from '../Assets/breadcrum_arrow.png'
+import { Link } from 'react-router-dom';
 
-function Breadcrumbs(props) {
-    const {product} = props;
+import './Breadcrumbs.css'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight, faHouse } from '@fortawesome/free-solid-svg-icons';
+
+function Breadcrumbs({product, category, brand}) {
+  const lowercaseCategory = category.toLowerCase();
 
   return (
-    <div className='breadcrumb'>
-        HOME <img src={arrow_icon} alt="" /> SHOP <img src={arrow_icon} alt="" />
-        {product.category} <img src={arrow_icon} alt="" /> {product.name} 
+    <div className='breadcrumbs'>
+      <div className="breadcrumbs-container">
+        <div className="breadcrumbs-blocks">
+          <div className="breadcrumbs-block">
+            <FontAwesomeIcon icon={faHouse} className='home-icon' />
+            <Link to={'/'}>Trang chủ</Link>
+          </div>
+          <div className="breadcrumbs-block">
+            <FontAwesomeIcon icon={faChevronRight} />
+            <Link to={`/${lowercaseCategory}`}>{category}</Link>
+          </div>
+          {(brand) ? 
+            <div className="breadcrumbs-block">
+              <FontAwesomeIcon icon={faChevronRight} />
+              <Link 
+                to={`/${lowercaseCategory}/${brand.toLowerCase()}`}
+              >
+                {brand}
+              </Link>
+            </div> :
+            <></>
+          }
+          {(product) ? 
+            <div className="breadcrumbs-block">
+              <FontAwesomeIcon icon={faChevronRight} />
+              <Link to={`/product/${product.id}`}>
+                {product.name}
+              </Link>
+            </div> :
+            <></>
+          }
+        </div>
+      </div>
     </div>
   )
 }
 
-export default Breadcrumbs
+export default Breadcrumbs;

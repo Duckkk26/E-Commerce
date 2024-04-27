@@ -6,6 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 
 function Item(props) {
+  const formatPrice = (price) => {
+    let priceString = price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    return priceString.replace(/\s/g, '');
+  }
 
   return (
     <div className='item'>
@@ -18,8 +22,8 @@ function Item(props) {
             <h3>{props.name}</h3>
           </div>
           <div className="box-price">
-            <p className="item-price-new">{props.new_price}₫</p>
-            <p className="item-price-old">{props.old_price}₫</p>
+            <p className="item-price-new">{formatPrice(props.new_price)}</p>
+            <p className="item-price-old">{formatPrice(props.old_price)}</p>
             <div className="item-price-percent">
               <p className="item-price-percent-detail">
                 Giảm&nbsp;

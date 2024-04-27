@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
-const { type } = require('os');
 const { v4: uuidv4 } = require('uuid')
 
 require('dotenv').config();
@@ -15,6 +14,8 @@ const port = process.env.PORT;
 app.use(express.json());
 app.use(cors());
 
+const categories = ['Mobile', 'Tablet', 'Laptop', 'PersonalComputer'];
+ 
 // Database Connection with MongoDB
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri);
@@ -38,13 +39,63 @@ const upload = multer({storage: storage});
 // Creating upload endpoint for images
 app.use('/images', express.static('upload/images'));
 
-app.post("/upload", upload.array('product'), (req, res) => {
+app.post("/upload", upload.any(), (req, res) => {
     const fileNames = req.files.map(file => file.filename);
     res.status(200).json({
         success: 1,
         image_urls: fileNames.map(filename => `http://localhost:${port}/images/${filename}`)
     });
 });
+
+//Schema for creating brands
+const Brand = mongoose.model("Brands", {
+    name: {
+        type: String,
+        required: true
+    },
+    category: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String,
+        required: true,
+    }
+});
+
+// API for adding new brands
+app.post('/addBrand', async (req, res) => {
+    let check = await Brand.findOne({
+        name: req.body.name,
+        category: req.body.category
+    })
+    if (check) {
+        return res.json({
+            success: false,
+            errors: "Existing brand found with the same category"
+        });
+    }
+
+    const brand = new Brand({
+        name: req.body.name,
+        category: req.body.category,
+        image: req.body.image
+    });
+    await brand.save();
+
+    res.json({
+        success: true,
+        name: req.body.name
+    });
+})
+
+// API for getting all brands in a category
+categories.forEach((category) => {
+    app.get(`/list${category}Brands`, async (req, res) => {
+        let brands = await Brand.find({category: `${category}`});
+        res.send(brands);
+    });
+})
 
 // Schema for creating products
 const Product = mongoose.model("Product", {
@@ -57,7 +108,7 @@ const Product = mongoose.model("Product", {
         required: true
     },
     images: {
-        type: Object,
+        type: Array,
         required: true
     },
     category: {
@@ -107,6 +158,7 @@ app.post('/addProduct', async (req,res) => {
     } else {
         id = 1;
     }
+
     const product = new Product({
         id: id,
         name: req.body.name,
@@ -120,6 +172,7 @@ app.post('/addProduct', async (req,res) => {
         quantity: req.body.quantity
     });
     await product.save();
+
     res.json({
         success: true,
         name: req.body.name
@@ -143,13 +196,12 @@ app.get('/allProducts', async (req, res) => {
 
 // API for new collection data
 app.get('/newCollections', async (req, res) => {
-    let newCollections = await Product.find({label: "new"})
+    let products = await Product.find({label: "new"})
+    let newCollections = products.slice(-10);
     res.send(newCollections);
 });
 
 // API for popular in a category
-const categories = ['Mobile', 'Tablet', 'Laptop', 'PersonalComputer'];
-
 categories.forEach((category) => {
     app.get(`/popularIn${category}`, async (req, res) => {
         let products = await Product.find({category: `${category}`, label: "popular"});
@@ -204,7 +256,6 @@ app.post('/signup', async (req, res) => {
         cartData: cart,
     })
     await user.save();
-    console
     
     const data = {
         user: {

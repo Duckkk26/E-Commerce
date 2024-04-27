@@ -15,7 +15,7 @@ code {
     monospace;
 }
 
-* {
+*:not(.cartitems *) {
   margin: 0;
   box-sizing: inherit;
 }
@@ -45,7 +45,16 @@ img {
   max-width: 100%;
 }
 
-p {
+p, hr, ul, li {
   margin: 0;
   padding: 0;
+}
+
+span {
+  font-style: inherit;
+  font-weight: inherit;
+}
+
+strong {
+  font-weight: 700;
 }

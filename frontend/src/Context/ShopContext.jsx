@@ -14,8 +14,8 @@ function ShopContextProvider(props) {
     const [allProducts, setAllProducts] = useState([]);
     const [cartItems, setCartItems] = useState(getDefaultCart());
 
-    useEffect(() => {
-        fetch('http://localhost:4000/allProducts')
+    const fetchData = async () => {
+        await fetch('http://localhost:4000/allProducts')
             .then((res) => res.json())
             .then((data) => setAllProducts(data));
 
@@ -31,6 +31,10 @@ function ShopContextProvider(props) {
             }).then((res) => res.json())
             .then((data) => setCartItems(data));
         }
+    }
+
+    useEffect(() => {
+        fetchData();
     }, []);
     
     const addToCart = (itemId) => {
