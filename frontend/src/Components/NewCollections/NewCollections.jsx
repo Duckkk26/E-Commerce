@@ -13,7 +13,7 @@ function NewCollections() {
   const [maxIndex, setMaxIndex] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:4000/newCollections')
+    fetch('http://localhost:4000/product/new')
       .then((res) => res.json())
       .then((data) => setNewCollections(data));
   }, []);

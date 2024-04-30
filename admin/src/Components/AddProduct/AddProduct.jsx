@@ -48,7 +48,7 @@ function AddProduct() {
 
         if (resData.success) {
             product.images = resData.image_urls;
-            await fetch('http://localhost:4000/addProduct', {
+            await fetch('http://localhost:4000/product/add', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
