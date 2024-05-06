@@ -3,8 +3,8 @@ import multer from 'multer'
 import cors from 'cors'
 import path from 'path'
 import { v4 as uuidv4} from 'uuid'
-import { route } from "./src/api/routes/index.js"
-import connection from "./src/db/connect.js"
+import { route } from "./api/routes/index.js"
+import connection from "./db/connect.js"
 
 const app = express();
 

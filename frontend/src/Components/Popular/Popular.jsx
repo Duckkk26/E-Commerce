@@ -15,7 +15,7 @@ function Popular({ category }) {
   const [maxIndex, setMaxIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/product/popularIn${category}`)
+    fetch(`http://localhost:4000/product/popular/${category}`)
       .then((res) => res.json())
       .then((data) => setPopularProducts(data));
 

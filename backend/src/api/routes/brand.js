@@ -30,13 +30,10 @@ router.post('/add', async (req, res) => {
 })
 
 // API for getting all brands in a category
-const categories = ['Mobile', 'Tablet', 'Laptop', 'PersonalComputer'];
-
-categories.forEach((category) => {
-    router.get(`/list${category}Brands`, async (req, res) => {
-        let brands = await BrandModel.find({category: `${category}`});
-        res.send(brands);
-    });
-})
+router.get('/:category/', async (req, res) => {
+    const category = req.params.category;
+    let brands = await BrandModel.find({category: category});
+    res.send(brands);
+});
 
 export { router };

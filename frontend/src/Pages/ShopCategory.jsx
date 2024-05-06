@@ -30,7 +30,7 @@ function ShopCategory(props) {
   }
 
   useEffect(() => {
-    fetch(`http://localhost:4000/brand/list${props.category}Brands`)
+    fetch(`http://localhost:4000/brand/${props.category}`)
     .then((res) => res.json())
     .then((data) => setBrandList(data));
   }, [props.category])
