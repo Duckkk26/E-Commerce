@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { ShopContext } from '../../Context/ShopContext';
 
 import './ProductDisplay.css'
@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 function ProductDisplay(props) {
     const {product} = props;
     const {addToCart} = useContext(ShopContext);
+    const [index, setIndex] = useState(0);
 
     const formatPrice = (price) => {
         let priceString = price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
@@ -25,7 +26,7 @@ function ProductDisplay(props) {
                         <div 
                             className="swiper-wrapper"
                             style={{
-                                transform: `translateX(0)`,
+                                transform: `translateX(${-index * 100}%)`,
                                 transitionDuration: '300ms'
                             }}
                         >
@@ -37,12 +38,20 @@ function ProductDisplay(props) {
                                 )
                             })}
                         </div>
-                        <div className="swiper-button-prev">
+                        <div 
+                            className="swiper-button-prev"
+                            onClick={() => setIndex(prev => prev - 1)}
+                            style={ (index === 0) ? {display: 'none'} : {} }
+                        >
                             <div className="icon">
                                 <FontAwesomeIcon icon={faChevronLeft} />
                             </div>
                         </div>
-                        <div className="swiper-button-next">
+                        <div 
+                            className="swiper-button-next"
+                            onClick={() => setIndex(prev => prev + 1)}
+                            style={ (index === product.images.length - 1) ? {display: 'none'} : {} }
+                        >
                             <div className="icon">
                                 <FontAwesomeIcon icon={faChevronRight} />
                             </div>
@@ -50,9 +59,13 @@ function ProductDisplay(props) {
                     </div>
                     <div className="thumbnail-slide swiper-container">
                         <div className="swiper-wrapper">
-                            {product.images.map((image, index) => {
+                            {product.images.map((image, i) => {
                                 return (
-                                    <div key={index} className="swiper-slide thumb-img">
+                                    <div 
+                                        key={i} 
+                                        className={`swiper-slide thumb-img ${index === i ? 'swiper-slide-thumb-active' : ''}`}
+                                        onClick={() => setIndex(i)}
+                                    >
                                         <img src={image} width={'58'} height={'58'} alt="" />
                                     </div>
                                 )

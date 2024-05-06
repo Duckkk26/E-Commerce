@@ -114,6 +114,11 @@
 .box-gallery .thumbnail-slide.swiper-container .swiper-wrapper .swiper-slide img {
     height: 100%;
     object-fit: cover;
+    filter: brightness(90%);
+}
+
+.box-gallery .thumbnail-slide.swiper-container .swiper-wrapper .swiper-slide.swiper-slide-thumb-active {
+    box-shadow: 0 0 0 1px #d70018;
 }
 
 .box-gallery .gallery-slide.swiper-container .swiper-button-prev, .box-gallery .gallery-slide.swiper-container .swiper-button-next {
