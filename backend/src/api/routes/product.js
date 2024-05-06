@@ -50,22 +50,58 @@ router.get('/all', async (req, res) => {
     res.send(products);
 });
 
-// API for new collection data
+// API for getting new collection data
 router.get('/new', async (req, res) => {
     let products = await ProductModel.find({label: "new"})
     let newCollections = products.slice(-10);
     res.send(newCollections);
 });
 
-// API for popular in a category
-const categories = ['Mobile', 'Tablet', 'Laptop', 'PersonalComputer'];
+// API for getting popular products in a category
+router.get('/popular/:category', async (req, res) => {
+    const category = req.params.category;
 
-categories.forEach((category) => {
-    router.get(`/popularIn${category}`, async (req, res) => {
-        let products = await ProductModel.find({category: `${category}`, label: "popular"});
-        let popularProducts = products;
-        res.send(popularProducts);
-    });
+    let products = await ProductModel.find({category: category, label: "popular"});
+    let popularProducts = products;
+    res.send(popularProducts);
+});
+
+// API for getting a product by ID
+router.get('/get/:productId', async (req, res) => {
+    const productId = req.params.productId;
+
+    let product = await ProductModel.findOne({id: productId});
+    let productData = product.toObject();
+    delete productData._id;
+
+    res.send(productData);
 })
+
+// API for updating a product
+router.patch('/update', async (req, res) => {
+    let product = {
+        name: req.body.name,
+        images: req.body.images,
+        category: req.body.category,
+        brand: req.body.brand,
+        new_price: req.body.new_price,
+        old_price: req.body.old_price,
+        description: req.body.description,
+        label: req.body.label,
+        quantity: req.body.quantity,
+        sold: req.body.sold
+    };
+
+    try {
+        await ProductModel.findOneAndUpdate({ id: req.body.id }, product);
+        res.json({
+            success: true,
+            name: req.body.name
+        });
+    } catch (error) {
+        console.error("Error updating product:", error);
+        res.status(500).json({ error: "Error updating product" });
+    }
+});
 
 export { router };

@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
+
 import './ListProduct.css'
 
 import crossIcon from '../../assets/cross_icon.png'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPenToSquare } from '@fortawesome/free-regular-svg-icons'
 
 function ListProduct() {
     const [allProducts, setAllProducts] = useState([]);
@@ -17,6 +21,11 @@ function ListProduct() {
     useEffect(() => {
         fetchInfo();
     }, []);
+
+    const formatPrice = (price) => {
+        let priceString = price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+        return priceString.replace(/\s/g, '');
+    }
 
     const removeProduct = async (id) => {
         await fetch('http://localhost:4000/product/remove', {
@@ -42,6 +51,7 @@ function ListProduct() {
             <div><p>Thời gian</p></div>
             <div><p>Số lượng</p></div>
             <div><p>Đã bán</p></div>
+            <div><p>Chỉnh sửa</p></div>
             <div><p>Xoá</p></div>
         </div>
         <div className="listproduct-allproducts">
@@ -52,12 +62,13 @@ function ListProduct() {
                         <div className="listproduct-format-main listproduct-format">
                             {(product.images) ? <img src={product.images[0]} alt="" className="listproduct-product-icon" /> : <img src={product.image} alt="" className="listproduct-product-icon" />}
                             <p>{product.name}</p>
-                            <div><p>${product.old_price}</p></div>
-                            <div><p>${product.new_price}</p></div>
+                            <div><p>{formatPrice(product.old_price)}</p></div>
+                            <div><p>{formatPrice(product.new_price)}</p></div>
                             <div><p>{product.category}</p></div>
                             <div><p>{product.date}</p></div>
                             <div><p>{product.quantity}</p></div>
                             <div><p>{product.sold}</p></div>
+                            <Link to={`/edit/${product.id}`}><div><FontAwesomeIcon icon={faPenToSquare} className='listproduct-edit-icon' /></div></Link>
                             <div><img onClick={() => removeProduct(product.id)} src={crossIcon} alt="" className="listproduct-remove-icon" /></div>
                         </div>
                         <hr />
