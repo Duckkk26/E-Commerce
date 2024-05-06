@@ -31,8 +31,14 @@ function LoginSignup() {
       });
 
     if (resData.success) {
-      localStorage.setItem('auth-token', resData.token);
-      window.location.replace("/");
+      if (!resData.admin) {
+        localStorage.setItem('auth-token', resData.token);
+        window.location.replace("/");
+      } else {
+        // Tạo URL mới bằng cách thêm auth-token là một tham số
+        const adminURL = `http://localhost:5173/?auth-token=${resData.token}`;
+        window.location.replace(adminURL);
+      }
     } else {
       alert(resData.errors);
     }
@@ -67,7 +73,11 @@ function LoginSignup() {
         <div className="loginsignup-container">
           <h1>{state}</h1>
           <div className="loginsignup-fields">
-            {state === "Sign Up" ? <input name='username' value={formData.username} onChange={(e) => handleChange(e)} type="text" placeholder='Username' /> :  <></>}
+            {
+              state === "Sign Up" ? 
+              <input name='username' value={formData.username} onChange={(e) => handleChange(e)} type="text" placeholder='Username' /> :  
+              <></>
+            }
             <input name='email' value={formData.email} onChange={(e) => handleChange(e)} type="text" placeholder='Email Address' />
             <input name='password' value={formData.password} onChange={(e) => handleChange(e)} type="password" placeholder='Password' />
           </div>

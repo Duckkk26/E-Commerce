@@ -18,6 +18,11 @@ const UserSchema = new Schema({
     cartData: {
         type: Object
     },
+    admin: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     date: {
         type: Date,
         default: Date.now

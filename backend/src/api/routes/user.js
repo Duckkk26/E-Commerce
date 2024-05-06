@@ -25,6 +25,7 @@ router.post('/signup', async (req, res) => {
         email: req.body.email,
         password: req.body.password,
         cartData: cart,
+        admin: req.body.admin
     })
     await user.save();
     
@@ -36,7 +37,8 @@ router.post('/signup', async (req, res) => {
     const token = jwt.sign(data, 'secret_ecom');
     res.json({
         success: true,
-        token
+        token,
+        admin: user.admin
     });
 });
 
@@ -54,7 +56,8 @@ router.post('/login', async (req, res) => {
             const token = jwt.sign(data, 'secret_ecom');
             res.json({
                 success: true,
-                token
+                token,
+                admin: user.admin
             })
         } else {
             res.json({
@@ -75,7 +78,7 @@ router.post('/addToCart', fetchUser, async (req, res) => {
     let userData = await UserModel.findOne({_id: req.user.id});
     userData.cartData[req.body.itemId] += 1;
     await UserModel.findOneAndUpdate({_id: req.user.id}, {cartData: userData.cartData});
-    res.send("Added");
+    res.json("Added");
 });
 
 // API for removing product from cart
@@ -85,7 +88,7 @@ router.post('/removeFromCart', fetchUser, async (req, res) => {
         userData.cartData[req.body.itemId] -= 1;
     }
     await UserModel.findOneAndUpdate({_id: req.user.id}, {cartData: userData.cartData});
-    res.send("Removed");
+    res.json("Removed");
 });
 
 // API for getting cart data 

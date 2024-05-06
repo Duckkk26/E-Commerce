@@ -14,6 +14,7 @@
 
 .nav-profile {
     width: 75px;
+    cursor: pointer;
 }
 
 @media (max-width: 800px) {
