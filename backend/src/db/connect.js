@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
 
-const uri = 'mongodb+srv://trongduc2003ht:4BPPwb6uhL2lrxG5@cluster0.vric93h.mongodb.net/e-commerce';
+dotenv.config();
+const uri = process.env.MONGODB_URI;
 
 // Database Connection with MongoDB
 const connection = mongoose.connect(uri)

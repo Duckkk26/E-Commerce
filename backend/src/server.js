@@ -1,6 +1,7 @@
 import express from "express"
 import multer from 'multer'
 import cors from 'cors'
+import dotenv from 'dotenv'
 import path from 'path'
 import { v4 as uuidv4} from 'uuid'
 import { route } from "./api/routes/index.js"
@@ -11,6 +12,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 route(app);
+
+dotenv.config();
+const port = process.env.PORT;
 
 // API Creation
 app.get("/", (req, res) => {
@@ -39,7 +43,6 @@ app.post("/upload", upload.any(), (req, res) => {
     });
 });
 
-const port = process.env.PORT || 4000;
 connection.then(() => {
     app.listen(port, (error) => {
         if (!error) {

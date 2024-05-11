@@ -1,9 +1,13 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
 import UserModel from '../../db/model/User.js'
-import { fetchUser } from '../utils/fetchUserFromToken.js';
+import { fetchUser } from '../middleware/fetchUserFromToken.js';
 
 const router = express.Router();
+
+dotenv.config();
+const jwt_secret = process.env.JWT_SECRET;
 
 // API for registering user account
 router.post('/signup', async (req, res) => {
@@ -34,7 +38,7 @@ router.post('/signup', async (req, res) => {
             id: user.id
         }
     };
-    const token = jwt.sign(data, 'secret_ecom');
+    const token = jwt.sign(data, jwt_secret);
     res.json({
         success: true,
         token,
@@ -53,7 +57,7 @@ router.post('/login', async (req, res) => {
                     id: user.id
                 }
             };
-            const token = jwt.sign(data, 'secret_ecom');
+            const token = jwt.sign(data, jwt_secret);
             res.json({
                 success: true,
                 token,
