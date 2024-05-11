@@ -38,7 +38,7 @@ function ListProduct() {
         });
         await fetchInfo();
     }
-
+    
   return (
     <div className='listproduct'>
         <h1>All Products List</h1>
@@ -66,8 +66,8 @@ function ListProduct() {
                             <div><p>{formatPrice(product.new_price)}</p></div>
                             <div><p>{product.category}</p></div>
                             <div><p>{product.date}</p></div>
-                            <div><p>{product.quantity}</p></div>
-                            <div><p>{product.sold}</p></div>
+                            <div><p>{product.total_quantity}</p></div>
+                            <div><p>{product.total_sold}</p></div>
                             <Link to={`/edit/${product.id}`}><div><FontAwesomeIcon icon={faPenToSquare} className='listproduct-edit-icon' /></div></Link>
                             <div><img onClick={() => removeProduct(product.id)} src={crossIcon} alt="" className="listproduct-remove-icon" /></div>
                         </div>

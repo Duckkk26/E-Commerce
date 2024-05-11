@@ -15,7 +15,7 @@ code {
     monospace;
 }
 
-*:not(.cartitems *) {
+*:not(.cartitems *), ::after, ::before {
   margin: 0;
   box-sizing: inherit;
 }

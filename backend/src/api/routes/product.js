@@ -23,9 +23,10 @@ router.post('/add', async (req,res) => {
         brand: req.body.brand,
         new_price: req.body.new_price,
         old_price: req.body.old_price,
+        colors: req.body.colors,
         description: req.body.description,
         label: req.body.label,
-        quantity: req.body.quantity
+        total_quantity: req.body.total_quantity
     });
     await product.save();
 
@@ -86,10 +87,10 @@ router.patch('/update', async (req, res) => {
         brand: req.body.brand,
         new_price: req.body.new_price,
         old_price: req.body.old_price,
+        colors: req.body.colors,
         description: req.body.description,
         label: req.body.label,
-        quantity: req.body.quantity,
-        sold: req.body.sold
+        total_quantity: req.body.total_quantity
     };
 
     try {

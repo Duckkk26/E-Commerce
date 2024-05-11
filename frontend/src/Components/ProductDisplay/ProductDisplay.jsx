@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ShopContext } from '../../Context/ShopContext';
 
 import './ProductDisplay.css'
@@ -11,6 +11,17 @@ function ProductDisplay(props) {
     const {product} = props;
     const {addToCart} = useContext(ShopContext);
     const [index, setIndex] = useState(0);
+    let slideLength = product.images.length + product.colors.length;
+    const [choosenColor, setChoosenColor] = useState(0);
+
+    useEffect(() => {
+        let minPriceColor = 0;
+        product.colors.forEach((item, index) => {
+            if (product.colors[minPriceColor].new_price > item.new_price)
+                minPriceColor = index;
+        })
+        setChoosenColor(minPriceColor);
+    }, [product])
 
     const formatPrice = (price) => {
         let priceString = price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
@@ -37,6 +48,13 @@ function ProductDisplay(props) {
                                     </div>
                                 )
                             })}
+                            {product.colors.map((item, index) => {
+                                return (
+                                    <div key={index} className="swiper-slide gallery-img">
+                                        <img src={item.image} alt="" />
+                                    </div>
+                                )
+                            })}
                         </div>
                         <div 
                             className="swiper-button-prev"
@@ -50,7 +68,7 @@ function ProductDisplay(props) {
                         <div 
                             className="swiper-button-next"
                             onClick={() => setIndex(prev => prev + 1)}
-                            style={ (index === product.images.length - 1) ? {display: 'none'} : {} }
+                            style={ (index === slideLength - 1) ? {display: 'none'} : {} }
                         >
                             <div className="icon">
                                 <FontAwesomeIcon icon={faChevronRight} />
@@ -59,17 +77,32 @@ function ProductDisplay(props) {
                     </div>
                     <div className="thumbnail-slide swiper-container">
                         <div className="swiper-wrapper">
-                            {product.images.map((image, i) => {
-                                return (
-                                    <div 
-                                        key={i} 
-                                        className={`swiper-slide thumb-img ${index === i ? 'swiper-slide-thumb-active' : ''}`}
-                                        onClick={() => setIndex(i)}
-                                    >
-                                        <img src={image} width={'58'} height={'58'} alt="" />
-                                    </div>
-                                )
-                            })}
+                            {
+                                product.images.map((image, i) => {
+                                    return (
+                                        <div 
+                                            key={i} 
+                                            className={`swiper-slide thumb-img ${index === i ? 'swiper-slide-thumb-active' : ''}`}
+                                            onClick={() => setIndex(i)}
+                                        >
+                                            <img src={image} width={'58'} height={'58'} alt="" />
+                                        </div>
+                                    )
+                                })
+                            }
+                            {
+                                product.colors.map((item, i) => {
+                                    return (
+                                        <div 
+                                            key={i} 
+                                            className={`swiper-slide thumb-img ${index === product.images.length + i && 'swiper-slide-thumb-active'}`}
+                                            onClick={() => setIndex(product.images.length + i)}
+                                        >
+                                            <img src={item.image} width={'58'} height={'58'} alt="" />
+                                        </div>
+                                    )
+                                })
+                            }
                         </div>
                     </div>
                 </div>
@@ -99,30 +132,43 @@ function ProductDisplay(props) {
                     </div>
                 </div>
                 <hr />
-                <div className="box-product-variants">
+                <div className="box-product-colors">
                     <div className="box-title">
                         <p>Chọn màu để xem giá chi tiết</p>
                     </div>
                     <div className="box-content">
-                        <ul className="list-variants">
-                            <li className="item-variant">
-                                <a title='Titan Tự Nhiên' className="change-color-btn">
-                                    <img src={product.images[0]} alt="iPhone 15 Pro Max 256GB | Chính hãng VN/A" />
-                                    <div>
-                                        <strong className="item-variant-name">Titan Tự Nhiên</strong>
-                                        <span>{formatPrice(product.new_price)}</span>
-                                    </div>
-                                </a>
-                            </li>
+                        <ul className="list-colors">
+                            {
+                                product.colors.map((item, index) => (
+                                    <li 
+                                        key={index} 
+                                        className={
+                                            `item-color ${choosenColor === index && 'choosen-color'}`
+                                        }
+                                        onClick={() => {
+                                            setIndex(product.images.length + index);
+                                            setChoosenColor(index);
+                                        }}
+                                    >
+                                        <a title={item.color} className="change-color-btn">
+                                            <img src={item.image} alt={product.name} />
+                                            <div>
+                                                <strong className="item-color-name">{item.color}</strong>
+                                                <span>{formatPrice(item.new_price)}</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                ))
+                            }
                         </ul>
                     </div>
                 </div>
                 <div className="box-price">
                     <div className="item-price-detail">
-                        <p className="item-new-price">{formatPrice(product.new_price)}</p>
+                        <p className="item-new-price">{formatPrice(product.colors[choosenColor].new_price)}</p>
                     </div>
                     <div className="item-price-detail">
-                        <p className="item-old-price">{formatPrice(product.old_price)}</p>
+                        <p className="item-old-price">{formatPrice(product.colors[choosenColor].old_price)}</p>
                     </div>
                 </div>
                 <div className="box-order-btn">

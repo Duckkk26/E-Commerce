@@ -8,8 +8,6 @@ function DescriptionBox({ product }) {
         setDescription(product.description.split('\n'));
     }, [])
 
-    console.log(description);
-
   return (
     <div className='descriptionbox'>
         <div className="descriptionbox-nav">
