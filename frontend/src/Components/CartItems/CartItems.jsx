@@ -22,24 +22,29 @@ function CartItems() {
             <div><p>Xoá</p></div>
         </div>
         <hr />
-        {allProducts.map((item, index) => {
-            if (cartItems[item.id] > 0) {
-                return (
-                    <div key={index}>
-                        <div className="cartitems-format-main cartitem-format">
-                            <img src={item.images[0]} alt="" className='cartitem-product-icon' />
-                            <p>{item.name}</p>
-                            <div><p>{formatPrice(item.new_price)}</p></div>
-                            <div><button className='cartitem-quantity'>{cartItems[item.id]}</button></div>
-                            <div><p>{formatPrice(item.new_price * cartItems[item.id])}</p></div>
-                            <img className='cartitem-remove-icon' src={remove_icon} onClick={() => removeFromCart(item.id)} alt="" />
-                        </div>
-                        <hr />
-                    </div>
-                )
-            }
-            return null;
-        })}
+        {
+            cartItems.map((product, index) => {
+                let key = 0;
+                if (product.length > 0) {
+                    return product.map((item) => {
+                        return (
+                            <div key={key++}>
+                                <div className="cartitems-format-main cartitem-format">
+                                    <img src={item.image} alt="" className='cartitem-product-icon' />
+                                    <p>{allProducts[index - 1].name}; {item.color}</p>
+                                    <div><p>{formatPrice(item.price)}</p></div>
+                                    <div><button className='cartitem-quantity'>{item.quantity}</button></div>
+                                    <div><p>{formatPrice(item.price * item.quantity)}</p></div>
+                                    <img className='cartitem-remove-icon' src={remove_icon} onClick={() => removeFromCart(index, item.color)} alt="" />
+                                </div>
+                                <hr />
+                            </div>
+                        )
+                    })
+                }
+                return null;
+            })
+        }
         <div className="cartitems-down">
             <div className="cartitems-total">
                 <h1>Tổng tiền</h1>

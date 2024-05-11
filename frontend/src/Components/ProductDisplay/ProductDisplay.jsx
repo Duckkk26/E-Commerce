@@ -172,13 +172,29 @@ function ProductDisplay(props) {
                     </div>
                 </div>
                 <div className="box-order-btn">
-                    <button onClick={() => addToCart(product.id)} className="order-btn">
+                    <button 
+                        onClick={() => addToCart(
+                            product.id, 
+                            product.colors[choosenColor].color, 
+                            product.colors[choosenColor].image, 
+                            product.colors[choosenColor].new_price
+                        )} 
+                        className="order-btn"
+                    >
                         <Link to='/cart'>
                             <strong>MUA NGAY</strong>
                             <span>(Thanh toán khi nhận hàng hoặc nhận tại cửa hàng)</span>
                         </Link>
                     </button>
-                    <button onClick={() => addToCart(product.id)} className="add-to-cart-btn">
+                    <button 
+                        onClick={() => addToCart(
+                            product.id, 
+                            product.colors[choosenColor].color, 
+                            product.colors[choosenColor].image, 
+                            product.colors[choosenColor].new_price
+                        )} 
+                        className="add-to-cart-btn"
+                    >
                         <FontAwesomeIcon icon={faCartPlus} />
                         <span>Thêm vào giỏ</span>
                     </button>
