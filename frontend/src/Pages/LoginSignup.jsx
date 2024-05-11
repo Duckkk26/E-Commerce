@@ -31,13 +31,13 @@ function LoginSignup() {
       });
 
     if (resData.success) {
-      if (!resData.admin) {
-        localStorage.setItem('auth-token', resData.token);
-        window.location.replace("/");
-      } else {
+      if (resData.role === "admin") {
         // Tạo URL mới bằng cách thêm auth-token là một tham số
         const adminURL = `http://localhost:5173/?auth-token=${resData.token}`;
         window.location.replace(adminURL);
+      } else {
+        localStorage.setItem('auth-token', resData.token);
+        window.location.replace("/");
       }
     } else {
       alert(resData.errors);

@@ -2,7 +2,7 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import UserModel from '../../db/model/User.js'
-import { fetchUser } from '../middleware/fetchUserFromToken.js';
+import CartModel from '../../db/model/Cart.js';
 
 const router = express.Router();
 
@@ -19,19 +19,26 @@ router.post('/signup', async (req, res) => {
         });
     }
     
-    let cart = {};
+    let cart = [];
     for (let i = 0; i< 300; i++) {
-        cart[i] = 0;
+        cart[i] = [];
     }
     
-    const user= new UserModel({
+    const user = new UserModel({
         name: req.body.username,
         email: req.body.email,
         password: req.body.password,
-        cartData: cart,
-        admin: req.body.admin
+        role: req.body.role
     })
     await user.save();
+    
+    if (user.role === "user") {
+        const userCart = new CartModel({
+            user_id: user.id,
+            cart_data: cart
+        })
+        await userCart.save();
+    }
     
     const data = {
         user: {
@@ -42,7 +49,7 @@ router.post('/signup', async (req, res) => {
     res.json({
         success: true,
         token,
-        admin: user.admin
+        role: user.role
     });
 });
 
@@ -61,7 +68,7 @@ router.post('/login', async (req, res) => {
             res.json({
                 success: true,
                 token,
-                admin: user.admin
+                role: user.role
             })
         } else {
             res.json({
@@ -75,30 +82,6 @@ router.post('/login', async (req, res) => {
             errors: "Wrong Email Address"
         });
     }
-});
-
-// API for adding products to cart
-router.post('/addToCart', fetchUser, async (req, res) => {
-    let userData = await UserModel.findOne({_id: req.user.id});
-    userData.cartData[req.body.itemId] += 1;
-    await UserModel.findOneAndUpdate({_id: req.user.id}, {cartData: userData.cartData});
-    res.json("Added");
-});
-
-// API for removing product from cart
-router.post('/removeFromCart', fetchUser, async (req, res) => {
-    let userData = await UserModel.findOne({_id: req.user.id});
-    if (userData.cartData[req.body.itemId] > 0) {
-        userData.cartData[req.body.itemId] -= 1;
-    }
-    await UserModel.findOneAndUpdate({_id: req.user.id}, {cartData: userData.cartData});
-    res.json("Removed");
-});
-
-// API for getting cart data 
-router.post('/getCart', fetchUser, async (req, res) => {
-    let userData = await UserModel.findOne({_id: req.user.id});
-    res.json(userData.cartData);
 });
 
 export { router };

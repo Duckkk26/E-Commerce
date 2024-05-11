@@ -18,10 +18,10 @@ const UserSchema = new Schema({
     cartData: {
         type: Object
     },
-    admin: {
-        type: Boolean,
+    role: {
+        type: String,
         required: true,
-        default: false
+        default: "user"
     },
     date: {
         type: Date,
