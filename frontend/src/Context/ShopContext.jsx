@@ -114,6 +114,39 @@ function ShopContextProvider(props) {
         }
     }
 
+    const deleteFromCart = (productId, color) => {
+        let found = false;
+        let index = 0;
+        let newCartItems = [...cartItems]
+        cartItems.forEach((product, i) => {
+            if (product && product.productId === productId && product.color === color) {
+                found = true;
+                index = i;
+            }
+        })
+        if (found) {
+            newCartItems.splice(index, 1);
+        }
+        setCartItems(newCartItems);
+
+        if (localStorage.getItem('auth-token')) {
+            fetch('http://localhost:4000/cart/deleteFromCart', {
+                method: 'DELETE',
+                headers: {
+                    Accept: 'application/form-data',
+                    'auth-token': `${localStorage.getItem('auth-token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "productId": productId,
+                    "color": color
+                })
+            })
+            .then((res) => res.json())
+            .then((data) => console.log(data));
+        }
+    }
+
     const getTotalCost = () => {
         let totalCost = 0;
         cartItems.forEach((product) => {
@@ -131,7 +164,7 @@ function ShopContextProvider(props) {
     }
     console.log(cartItems);
     
-    const contextValue = {allProducts, cartItems, addToCart, removeFromCart, getTotalCost, getTotalItems};
+    const contextValue = {allProducts, cartItems, addToCart, removeFromCart, deleteFromCart, getTotalCost, getTotalItems};
     
     return (
         <ShopContext.Provider value={contextValue}>

@@ -77,4 +77,25 @@ router.post('/removeFromCart', fetchUser, async (req, res) => {
     res.json("Removed");
 });
 
+router.delete('/deleteFromCart', fetchUser, async (req, res) => {
+    let userCart = await CartModel.findOne({user_id: req.user.id});
+    
+    // Check req.body.color if it was in the cart before
+    let found = false;
+    let index = 0;
+    userCart.cart_data.forEach((product, i) => {
+        if (product && product.productId === req.body.productId && product.color === req.body.color) {
+            found = true;
+            index = i;
+        }
+    })
+
+    if (found) {
+        userCart.cart_data.splice(index, 1);
+    }
+
+    await CartModel.findOneAndUpdate({user_id: req.user.id}, {cart_data: userCart.cart_data});
+    res.json("Deleted");
+})
+
 export { router };
