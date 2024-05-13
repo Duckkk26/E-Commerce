@@ -20,9 +20,6 @@ router.post('/signup', async (req, res) => {
     }
     
     let cart = [];
-    for (let i = 0; i< 300; i++) {
-        cart[i] = [];
-    }
     
     const user = new UserModel({
         name: req.body.username,

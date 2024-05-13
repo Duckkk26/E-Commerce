@@ -25,19 +25,20 @@ router.post('/addToCart', fetchUser, async (req, res) => {
     // Check req.body.color if it was in the cart before
     let found = false;
     let index = 0;
-    userCart.cart_data[req.body.productId].forEach((variant, i) => {
-        if (variant && variant.color === req.body.color) {
+    userCart.cart_data.forEach((product, i) => {
+        if (product && product.productId === req.body.productId && product.color === req.body.color) {
             found = true;
             index = i;
         }
     })
     if (found) {
-        userCart.cart_data[req.body.productId][index].quantity += 1;
+        userCart.cart_data[index].quantity += 1;
     }
     else {
-        userCart.cart_data[req.body.productId] = [
-            ...userCart.cart_data[req.body.productId],
+        userCart.cart_data = [
+            ...userCart.cart_data,
             {
+                productId: req.body.productId,
                 color: req.body.color,
                 image: req.body.image,
                 price: req.body.price,
@@ -52,27 +53,27 @@ router.post('/addToCart', fetchUser, async (req, res) => {
 
 // API for removing product from cart
 router.post('/removeFromCart', fetchUser, async (req, res) => {
-    let cart = await CartModel.findOne({user_id: req.user.id});
+    let userCart = await CartModel.findOne({user_id: req.user.id});
     
     // Check req.body.color if it was in the cart before
     let found = false;
     let index = 0;
-    cart.cart_data[req.body.productId].forEach((variant, i) => {
-        if (variant && variant.color === req.body.color) {
+    userCart.cart_data.forEach((product, i) => {
+        if (product && product.productId === req.body.productId && product.color === req.body.color) {
             found = true;
             index = i;
         }
     })
     if (found) {
-        if (cart.cart_data[req.body.productId][index].quantity > 0) {
-            cart.cart_data[req.body.productId][index].quantity -= 1;
+        if (userCart.cart_data[index].quantity > 0) {
+            userCart.cart_data[index].quantity -= 1;
         }
-        if (cart.cart_data[req.body.productId][index].quantity === 0) {
-            cart.cart_data[req.body.productId].splice(index, 1);
+        if (userCart.cart_data[index].quantity === 0) {
+            userCart.cart_data.splice(index, 1);
         }
     }
 
-    await CartModel.findOneAndUpdate({user_id: req.user.id}, {cart_data: cart.cart_data});
+    await CartModel.findOneAndUpdate({user_id: req.user.id}, {cart_data: userCart.cart_data});
     res.json("Removed");
 });
 

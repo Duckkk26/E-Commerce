@@ -10,22 +10,21 @@ const CartSchema = new Schema({
     cart_data: {
         type: [
             {
-                type: [
-                    {
-                        color: {
-                            type: String,
-                        },
-                        image: {
-                            type: String,
-                        },
-                        price: {
-                            type: Number,
-                        },
-                        quantity: {
-                            type: Number,
-                        }
-                    }
-                ]
+                productId: {
+                    type: Number
+                },
+                color: {
+                    type: String
+                },
+                image: {
+                    type: String
+                },
+                price: {
+                    type: Number
+                },
+                quantity: {
+                    type: Number
+                }
             }
         ],
         required: true

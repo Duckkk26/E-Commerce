@@ -24,25 +24,19 @@ function CartItems() {
         <hr />
         {
             cartItems.map((product, index) => {
-                let key = 0;
-                if (product.length > 0) {
-                    return product.map((item) => {
-                        return (
-                            <div key={key++}>
-                                <div className="cartitems-format-main cartitem-format">
-                                    <img src={item.image} alt="" className='cartitem-product-icon' />
-                                    <p>{allProducts[index - 1].name}; {item.color}</p>
-                                    <div><p>{formatPrice(item.price)}</p></div>
-                                    <div><button className='cartitem-quantity'>{item.quantity}</button></div>
-                                    <div><p>{formatPrice(item.price * item.quantity)}</p></div>
-                                    <img className='cartitem-remove-icon' src={remove_icon} onClick={() => removeFromCart(index, item.color)} alt="" />
-                                </div>
-                                <hr />
-                            </div>
-                        )
-                    })
-                }
-                return null;
+                return (
+                    <div key={index}>
+                        <div className="cartitems-format-main cartitem-format">
+                            <img src={product.image} alt="" className='cartitem-product-icon' />
+                            <p>{allProducts[product.productId - 1].name}; {product.color}</p>
+                            <div><p>{formatPrice(product.price)}</p></div>
+                            <div><button className='cartitem-quantity'>{product.quantity}</button></div>
+                            <div><p>{formatPrice(product.price * product.quantity)}</p></div>
+                            <img className='cartitem-remove-icon' src={remove_icon} onClick={() => removeFromCart(product.productId, product.color)} alt="" />
+                        </div>
+                        <hr />
+                    </div>
+                )
             })
         }
         <div className="cartitems-down">

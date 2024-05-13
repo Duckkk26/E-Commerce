@@ -2,17 +2,9 @@ import React, { createContext, useEffect, useState } from "react";
 
 export const ShopContext = createContext(null);
 
-const getDefaultCart = () => {
-    let cart = [];
-    for (let i = 0; i < 300 + 1; i++) {
-        cart[i] = [];
-    }
-    return cart;
-}
-
 function ShopContextProvider(props) {
     const [allProducts, setAllProducts] = useState([]);
-    const [cartItems, setCartItems] = useState(getDefaultCart());
+    const [cartItems, setCartItems] = useState([]);
 
     const fetchData = async () => {
         await fetch('http://localhost:4000/product/all')
@@ -41,19 +33,20 @@ function ShopContextProvider(props) {
         let found = false;
         let index = 0;
         let newCartItems = [...cartItems]
-        cartItems[productId].forEach((variant, i) => {
-            if (variant && variant.color === color) {
+        cartItems.forEach((product, i) => {
+            if (product && product.productId === productId && product.color === color) {
                 found = true;
                 index = i;
             }
         })
         if (found) {
-            newCartItems[productId][index].quantity += 1;
+            newCartItems[index].quantity += 1;
         }
         else {
-            newCartItems[productId] = [
-                ...newCartItems[productId],
+            newCartItems = [
+                ...newCartItems,
                 {
+                    productId: productId,
                     color: color,
                     image: image,
                     price: price,
@@ -87,18 +80,18 @@ function ShopContextProvider(props) {
         let found = false;
         let index = 0;
         let newCartItems = [...cartItems]
-        cartItems[productId].forEach((variant, i) => {
-            if (variant && variant.color === color) {
+        cartItems.forEach((product, i) => {
+            if (product && product.productId === productId && product.color === color) {
                 found = true;
                 index = i;
             }
         })
         if (found) {
-            if (newCartItems[productId][index].quantity > 0) {
-                newCartItems[productId][index].quantity -= 1;
+            if (newCartItems[index].quantity > 0) {
+                newCartItems[index].quantity -= 1;
             }
-            if (newCartItems[productId][index].quantity === 0) {
-                newCartItems[productId].splice(index, 1);
+            if (newCartItems[index].quantity === 0) {
+                newCartItems.splice(index, 1);
             }
         }
         setCartItems(newCartItems);
@@ -124,11 +117,7 @@ function ShopContextProvider(props) {
     const getTotalCost = () => {
         let totalCost = 0;
         cartItems.forEach((product) => {
-            if (product.length > 0) {
-                product.forEach((color) => {
-                    totalCost += color.price * color.quantity;
-                })
-            }
+            totalCost += product.price * product.quantity
         })
         return totalCost;
     }
@@ -136,14 +125,11 @@ function ShopContextProvider(props) {
     const getTotalItems = () => {
         let totalItems = 0;
         cartItems.forEach((product) => {
-            if (product.length > 0) {
-                product.forEach((color) => {
-                    totalItems += color.quantity;
-                })
-            }
+            totalItems += Number(product.quantity);
         })
         return totalItems;
     }
+    console.log(cartItems);
     
     const contextValue = {allProducts, cartItems, addToCart, removeFromCart, getTotalCost, getTotalItems};
     
