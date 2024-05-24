@@ -103,11 +103,11 @@ function Navbar() {
                     <span id="items-in-cart">{getTotalItems()}</span>
                 </div>
             </Link>
-            {localStorage.getItem('auth-token')
+            {sessionStorage.getItem('auth-token')
                 ?<div 
                     className="login-btn"
                     onClick={() => {
-                        localStorage.removeItem('auth-token');
+                        sessionStorage.removeItem('auth-token');
                         window.location.replace('/');
                     }}
                 >

@@ -4,17 +4,61 @@ import remove_icon from '../Assets/cart_cross_icon.png'
 import { ShopContext } from '../../Context/ShopContext'
 
 function CartItems() {
-    const {allProducts, cartItems, addToCart, removeFromCart, deleteFromCart, getTotalCost} = useContext(ShopContext)
+    const {allProducts, cartItems, orderProducts,
+        addToCart, removeFromCart, deleteFromCart,
+        addToOrder, removeFromOrder, isProductInOrder, getTotalCost
+    } = useContext(ShopContext)
 
     const formatPrice = (price) => {
         let priceString = price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
         return priceString.replace(/\s/g, '');
     }
 
+    const handleAllProducts = () => {
+        if (orderProducts.length === cartItems.length)
+            removeFromOrder(cartItems);
+        else 
+            addToOrder(cartItems);
+    }
+
+    const handleProduct = (product) => {
+        if (isProductInOrder(product)) {
+            removeFromOrder(product);
+        }
+        else {
+            addToOrder(product);
+        }
+    }
+
   return (
     <div className='cartitems'>
+        <div className="header-action">
+            <div className="select-all-products-action">
+                <div className="custom-control">
+                    <input 
+                        type="checkbox" 
+                        className='custom-control-input' 
+                        value="true" 
+                        id="__checkbox__all"
+                        checked={cartItems.length !== 0 && orderProducts.length === cartItems.length}
+                        onChange={() => handleAllProducts()}
+                    />
+                    <label htmlFor="__checkbox__all" className="custom-control-label"></label>
+                </div>
+                <p>Chọn tất cả</p>
+            </div>
+            <button 
+                className="btn-remove-checked"
+                onClick={() => removeFromOrder(cartItems)}
+                style={orderProducts.length === 0 ? {display: 'none'} : {}}
+            >
+                <em>Xoá các sản phẩm đã chọn</em>
+            </button>
+        </div>
+        <hr />
         <div className="cartitems-format-main">
-            <p>Sản phẩm</p>
+            <div></div>
+            <div><p>Sản phẩm</p></div>
             <p>Tên sản phẩm</p>
             <div><p>Giá</p></div>
             <div><p>Số lượng</p></div>
@@ -27,7 +71,17 @@ function CartItems() {
                 return (
                     <div key={index}>
                         <div className="cartitems-format-main cartitem-format">
-                            <img src={product.image} alt="" className='cartitem-product-icon' />
+                            <input 
+                                type="checkbox" 
+                                className='custom-control-input' 
+                                value={true} 
+                                id={`__checkbox__${index}`}
+                                checked={isProductInOrder(product) ? true : false}
+                                onChange={() => handleProduct(product)} 
+                            />
+                            <label className='custom-control-label' htmlFor={`__checkbox__${index}`}>
+                                <img src={product.image} alt={allProducts[product.productId - 1].name} className='cartitem-product-icon' />
+                            </label>
                             <p>{allProducts[product.productId - 1].name} - {product.color}</p>
                             <div><p>{formatPrice(product.price)}</p></div>
                             <div className='cartitem-quantity-action'>
@@ -37,7 +91,7 @@ function CartItems() {
                                 >
                                     -
                                 </span>
-                                <input type="text"  className='cartitem-quantity' readOnly value={product.quantity} />
+                                <input type="text" className='cartitem-quantity' readOnly value={product.quantity} />
                                 <span 
                                     className="plus"
                                     onClick={() => addToCart(product.productId, product.color, product.image, product.price)}
