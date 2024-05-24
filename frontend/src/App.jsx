@@ -1,4 +1,3 @@
-import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Import Header and Footer Components
@@ -12,11 +11,15 @@ import Product from './Pages/Product'
 import Cart from './Pages/Cart'
 import LoginSignup from './Pages/LoginSignup'
 
+// Import CSS
+import './App.css';
+
 function App() {
   return (
     <>
       <BrowserRouter>
         <Header />
+        <div className="clear"></div>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/mobile' element={<ShopCategory category="Mobile" />}>

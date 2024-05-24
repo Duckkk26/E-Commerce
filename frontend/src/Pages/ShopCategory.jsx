@@ -38,7 +38,6 @@ function ShopCategory(props) {
   return (
     <div className='category-container'>
       <Breadcrumbs category={props.category} brand={productBrand} />
-      <div className="clear"></div>
       <div className="block-filter-brand">
         <div className="filter-brands-title">Chọn theo thương hiệu</div>
         <div className="list-brand">

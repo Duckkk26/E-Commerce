@@ -24,7 +24,6 @@ function Product() {
         (product) ? 
         <>
           <Breadcrumbs product={product} category={product.category} />
-          <div className="clear"></div>
           <ProductDisplay product={product} />
           <DescriptionBox product={product} />
           <RelatedProducts category={product.category} />

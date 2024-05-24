@@ -58,6 +58,11 @@
     white-space: nowrap;
 }
 
+.block-breadcrumbs-clear {
+    padding-top: 30px;
+    position: relative;
+}
+
 @media (max-width: 1200px) {
     .breadcrumbs-container {
         max-width: 1200px !important;
