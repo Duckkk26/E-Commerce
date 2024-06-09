@@ -14,13 +14,12 @@ function ShopContextProvider(props) {
 
         if (sessionStorage.getItem('auth-token')) {
             fetch('http://localhost:4000/cart/get', {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                     Accept: 'application/form-data',
                     'auth-token': `${sessionStorage.getItem('auth-token')}`,
                     'Content-Type': 'application/json'
-                },
-                body: "",
+                }
             }).then((res) => res.json())
             .then((data) => setCartItems(data));
         }
@@ -29,8 +28,13 @@ function ShopContextProvider(props) {
     useEffect(() => {
         fetchData();
     }, []);
+
+    const formatPrice = (price) => {
+        let priceString = price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+        return priceString.replace(/\s/g, '');
+    }
     
-    const addToCart = (productId, color, image, price) => {
+    const addToCart = (productId, name, color, image, new_price, old_price) => {
         let found = false;
         let index = 0;
         let newCartItems = [...cartItems]
@@ -52,9 +56,11 @@ function ShopContextProvider(props) {
                 ...newCartItems,
                 {
                     productId: productId,
+                    name: name,
                     color: color,
                     image: image,
-                    price: price,
+                    new_price: new_price,
+                    old_price: old_price,
                     quantity: 1
                 }
             ]
@@ -73,7 +79,8 @@ function ShopContextProvider(props) {
                     "productId": productId,
                     "color": color,
                     "image": image,
-                    "price": price
+                    "new_price": new_price,
+                    "old_price": old_price,
                 })
             })
             .then((res) => res.json())
@@ -200,12 +207,13 @@ function ShopContextProvider(props) {
     const getTotalCost = () => {
         let totalCost = 0;
         orderProducts.forEach((product) => {
-            totalCost += product.price * product.quantity
+            totalCost += product.new_price * product.quantity
         })
         return totalCost;
     }
     
-    const contextValue = {allProducts, cartItems, orderProducts,
+    const contextValue = {
+        allProducts, cartItems, orderProducts, formatPrice,
         addToCart, removeFromCart, deleteFromCart, getTotalItems, 
         addToOrder, removeFromOrder, isProductInOrder, getTotalCost
     };

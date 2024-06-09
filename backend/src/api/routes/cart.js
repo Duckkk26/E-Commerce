@@ -1,10 +1,13 @@
 import express from 'express'
 import dotenv from 'dotenv'
 
-//Import model for cart
+// Import model for product
+import ProductModel from '../../db/model/Product.js'
+
+// Import model for cart
 import CartModel from '../../db/model/Cart.js'
 
-//Import middlewares
+// Import middlewares
 import { fetchUser } from '../middleware/fetchUserFromToken.js';
 
 const router = express.Router();
@@ -13,9 +16,29 @@ dotenv.config();
 const jwt_secret = process.env.JWT_SECRET;
 
 // API for getting cart data 
-router.post('/get', fetchUser, async (req, res) => {
+router.get('/get', fetchUser, async (req, res) => {
     let userCart = await CartModel.findOne({user_id: req.user.id});
-    res.json(userCart.cart_data);
+    
+    // Use Promise.all to handle asynchronous operations in map
+    let cart = await Promise.all(userCart.cart_data.map(async (item) => {
+        let product = await ProductModel.findOne({id: item.productId});
+        let cartItem;
+        product.colors.forEach((colorItem) => {
+            if (colorItem.color === item.color) {
+                cartItem = colorItem;
+            }
+        })
+        return {
+            productId: item.productId,
+            name: product?.name,
+            color: item.color,
+            image: cartItem.image,
+            new_price: cartItem.new_price,
+            old_price: cartItem.old_price,
+            quantity: item.quantity
+        }; 
+    }));
+    res.json(cart);
 });
 
 // API for adding cart data to cart
@@ -40,8 +63,6 @@ router.post('/addToCart', fetchUser, async (req, res) => {
             {
                 productId: req.body.productId,
                 color: req.body.color,
-                image: req.body.image,
-                price: req.body.price,
                 quantity: 1
             }
         ]

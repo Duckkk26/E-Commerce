@@ -1,15 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 
 import './Item.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
+import { ShopContext } from '../../Context/ShopContext'
 
 function Item(props) {
-  const formatPrice = (price) => {
-    let priceString = price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-    return priceString.replace(/\s/g, '');
-  }
+  const { formatPrice } = useContext(ShopContext);
 
   return (
     <div className='item'>

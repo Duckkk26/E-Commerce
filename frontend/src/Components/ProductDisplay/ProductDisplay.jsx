@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 function ProductDisplay(props) {
     const {product} = props;
-    const {addToCart} = useContext(ShopContext);
+    const { formatPrice, addToCart } = useContext(ShopContext);
     const [index, setIndex] = useState(0);
     let slideLength = product.images.length + product.colors.length;
     const [choosenColor, setChoosenColor] = useState(0);
@@ -22,11 +22,6 @@ function ProductDisplay(props) {
         })
         setChoosenColor(minPriceColor);
     }, [product])
-
-    const formatPrice = (price) => {
-        let priceString = price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-        return priceString.replace(/\s/g, '');
-    }
 
   return (
     <div className='productdisplay'>
@@ -177,7 +172,8 @@ function ProductDisplay(props) {
                             product.id, 
                             product.colors[choosenColor].color, 
                             product.colors[choosenColor].image, 
-                            product.colors[choosenColor].new_price
+                            product.colors[choosenColor].new_price,
+                            product.colors[choosenColor].old_price
                         )} 
                         className="order-btn"
                     >
@@ -188,10 +184,12 @@ function ProductDisplay(props) {
                     </button>
                     <button 
                         onClick={() => addToCart(
-                            product.id, 
+                            product.id,
+                            product.name,
                             product.colors[choosenColor].color, 
                             product.colors[choosenColor].image, 
-                            product.colors[choosenColor].new_price
+                            product.colors[choosenColor].new_price,
+                            product.colors[choosenColor].old_price
                         )} 
                         className="add-to-cart-btn"
                     >

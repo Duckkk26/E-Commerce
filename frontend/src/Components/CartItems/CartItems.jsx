@@ -1,18 +1,14 @@
 import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
 import './CartItems.css'
 import remove_icon from '../Assets/cart_cross_icon.png'
 import { ShopContext } from '../../Context/ShopContext'
 
 function CartItems() {
-    const {allProducts, cartItems, orderProducts,
+    const {cartItems, orderProducts, formatPrice,
         addToCart, removeFromCart, deleteFromCart,
         addToOrder, removeFromOrder, isProductInOrder, getTotalCost
     } = useContext(ShopContext)
-
-    const formatPrice = (price) => {
-        let priceString = price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-        return priceString.replace(/\s/g, '');
-    }
 
     const handleAllProducts = () => {
         if (orderProducts.length === cartItems.length)
@@ -80,10 +76,10 @@ function CartItems() {
                                 onChange={() => handleProduct(product)} 
                             />
                             <label className='custom-control-label' htmlFor={`__checkbox__${index}`}>
-                                <img src={product.image} alt={allProducts[product.productId - 1].name} className='cartitem-product-icon' />
+                                <img src={product.image} alt={product.name} className='cartitem-product-icon' />
                             </label>
-                            <p>{allProducts[product.productId - 1].name} - {product.color}</p>
-                            <div><p>{formatPrice(product.price)}</p></div>
+                            <p>{product.name} - {product.color}</p>
+                            <div><p>{formatPrice(product.new_price)}</p></div>
                             <div className='cartitem-quantity-action'>
                                 <span 
                                     className="minus"
@@ -94,12 +90,19 @@ function CartItems() {
                                 <input type="text" className='cartitem-quantity' readOnly value={product.quantity} />
                                 <span 
                                     className="plus"
-                                    onClick={() => addToCart(product.productId, product.color, product.image, product.price)}
+                                    onClick={() => addToCart(
+                                        product.productId,
+                                        product.name, 
+                                        product.color,
+                                        product.image,
+                                        product.new_price,
+                                        product.pld_price
+                                    )}
                                 >
                                     +
                                 </span>
                             </div>
-                            <div><p>{formatPrice(product.price * product.quantity)}</p></div>
+                            <div><p>{formatPrice(product.new_price * product.quantity)}</p></div>
                             <img className='cartitem-delete-icon' src={remove_icon} onClick={() => deleteFromCart(product.productId, product.color)} alt="" />
                         </div>
                         <hr />
@@ -126,7 +129,11 @@ function CartItems() {
                         <h3>{formatPrice(getTotalCost())}</h3>
                     </div>
                 </div>
-                <button>ĐẶT HÀNG</button>
+                <Link to='/order'>
+                    <button>
+                        ĐẶT HÀNG
+                    </button>
+                </Link>
             </div>
             <div className="cartitems-promocode">
                 <p>If you have a promo code, enter it here</p>
