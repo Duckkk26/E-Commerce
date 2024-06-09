@@ -15,9 +15,9 @@ code {
     monospace;
 }
 
-*:not(.cartitems *), ::after, ::before {
+*:not(.cartitems *, .loginsignup *), ::after, ::before {
   margin: 0;
-  box-sizing: inherit;
+  box-sizing: border-box;
 }
 
 a {

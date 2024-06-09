@@ -108,6 +108,7 @@ function Navbar() {
                     className="login-btn"
                     onClick={() => {
                         sessionStorage.removeItem('auth-token');
+                        sessionStorage.removeItem('user');
                         window.location.replace('/');
                     }}
                 >

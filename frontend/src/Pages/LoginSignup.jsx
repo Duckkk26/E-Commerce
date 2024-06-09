@@ -37,6 +37,7 @@ function LoginSignup() {
         window.location.replace(adminURL);
       } else {
         sessionStorage.setItem('auth-token', resData.token);
+        sessionStorage.setItem('user', JSON.stringify(resData.userInfo));
         window.location.replace("/");
       }
     } else {
@@ -61,6 +62,7 @@ function LoginSignup() {
 
     if (resData.success) {
       sessionStorage.setItem('auth-token', resData.token);
+      sessionStorage.setItem('user', JSON.stringify(resData.userInfo));
       window.location.replace("/");
     } else {
       alert(resData.errors);

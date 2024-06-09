@@ -43,9 +43,14 @@ router.post('/signup', async (req, res) => {
         }
     };
     const token = jwt.sign(data, jwt_secret);
+
     res.json({
         success: true,
         token,
+        userInfo : {
+            username: user.name,
+            email: user.email
+        },
         role: user.role
     });
 });
@@ -65,6 +70,10 @@ router.post('/login', async (req, res) => {
             res.json({
                 success: true,
                 token,
+                userInfo : {
+                    username: user.name,
+                    email: user.email
+                },
                 role: user.role
             })
         } else {
