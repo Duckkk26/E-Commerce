@@ -9,6 +9,7 @@ import Home from './Pages/Home';
 import ShopCategory from './Pages/ShopCategory'
 import Product from './Pages/Product'
 import Cart from './Pages/Cart'
+import Order from './Pages/Order';
 import LoginSignup from './Pages/LoginSignup'
 
 // Import CSS
@@ -32,6 +33,7 @@ function App() {
             <Route path=':productId' element={<Product />} />
           </Route>
           <Route path='/cart' element={<Cart />} />
+          <Route path='/order/*' element={<Order />} />
           <Route path='/login' element={<LoginSignup />} />
         </Routes>
         <Footer />
