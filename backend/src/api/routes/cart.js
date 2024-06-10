@@ -1,5 +1,4 @@
 import express from 'express'
-import dotenv from 'dotenv'
 
 // Import model for product
 import ProductModel from '../../db/model/Product.js'
@@ -11,9 +10,6 @@ import CartModel from '../../db/model/Cart.js'
 import { fetchUser } from '../middleware/fetchUserFromToken.js';
 
 const router = express.Router();
-
-dotenv.config();
-const jwt_secret = process.env.JWT_SECRET;
 
 // API for getting cart data 
 router.get('/get', fetchUser, async (req, res) => {
