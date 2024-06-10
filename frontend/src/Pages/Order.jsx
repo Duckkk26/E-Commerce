@@ -13,6 +13,22 @@ function Order() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isViewList, setIsViewList] = useState(false);
+  const user = JSON.parse(sessionStorage.getItem('user'));
+  const [order, setOrder] = useState({
+    username: user.username,
+    email: user.email,
+    customer_name: "",
+    phone: "",
+    address: "",
+    products: orderProducts,
+    note: "",
+    payment_modal: "",
+    payment_status: ""
+  })
+
+  const handleChange = (name, value) => {
+    setOrder({...order, [name]: value});
+  }
 
   const handleSubmit = () => {
     if (location.pathname === '/order/payment-info') {
@@ -39,8 +55,8 @@ function Order() {
         </div>
         <Routes>
           <Route path='/' element={<Navigate to='/order/payment-info' />} />
-          <Route path='/payment-info' element={<PaymentInfo />} />
-          <Route path='/payment' element={<Payment />} />
+          <Route path='/payment-info' element={<PaymentInfo order={order} handleChange={handleChange} />} />
+          <Route path='/payment' element={<Payment order={order} handleChange={handleChange} />} />
         </Routes>
       </div>
       <div>
@@ -61,14 +77,14 @@ function Order() {
               (location.pathname === '/order/payment') &&
               <div id='viewListItemInQuote'>
                 <button type="button" onClick={() => setIsViewList(true)} className="btn">
-                  Kiểm tra danh sách sản phẩm ({orderProducts.length})
+                  Kiểm tra danh sách sản phẩm ({order.products.length})
                 </button>
               </div>
             }
           </div>
         </div>
         <div style={{paddingTop: `${location.pathname === '/order/payment' ? '168px' : '130px'}`}}></div>
-        {isViewList && <ModalViewList closeViewList={() => setIsViewList(false)} />}
+        {isViewList && <ModalViewList products={order.products} closeViewList={() => setIsViewList(false)} />}
       </div>
     </div>
   )

@@ -23,7 +23,7 @@ function ModalViewList({ closeViewList }) {
                 <h5 id="modalViewListItemInQuote_modal-title" className="modal-title">
                   Danh sách sản phẩm đang thanh toán
                 </h5>
-                <button type="button" onClick={closeViewList} aria-label="Close" class="close">×</button>
+                <button type="button" onClick={closeViewList} aria-label="Close" className="close">×</button>
               </header>
               <div id="modalViewListItemInQuote_modal-body" className="modal-body">
                 {
