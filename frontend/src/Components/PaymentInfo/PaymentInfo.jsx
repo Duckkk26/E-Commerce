@@ -62,7 +62,7 @@ function PaymentInfo({ order, handleChange }) {
           setDistrictList(res.data)
         })
     }
-  }, [provinceID])
+  }, [provinceID, address.province])
 
   useEffect(() => {
     if (!districtID || !address.district) {
@@ -73,7 +73,7 @@ function PaymentInfo({ order, handleChange }) {
           setWardList(res.data)
         })
     }
-  }, [districtID])
+  }, [districtID, address.district])
   
   useEffect(() => {
     handleChange(
