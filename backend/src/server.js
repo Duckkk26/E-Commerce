@@ -6,12 +6,24 @@ import path from 'path'
 import { v4 as uuidv4} from 'uuid'
 import { route } from "./api/routes/index.js"
 import connection from "./db/connect.js"
+import { fileURLToPath } from 'url'
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 route(app);
+
+// Chuyển đổi `import.meta.url` thành __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Cấu hình để phục vụ tệp tĩnh từ thư mục "public"
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Cấu hình view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../views'));
 
 dotenv.config();
 const port = process.env.PORT;
