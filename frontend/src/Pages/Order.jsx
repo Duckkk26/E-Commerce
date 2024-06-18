@@ -17,7 +17,7 @@ function Order() {
   
   // Hàm để lưu order vào localStorage
   const saveOrderTolocalStorage = (order) => {
-    if (orderProducts.length) {
+    if (order.products.length) {
       localStorage.setItem('order', JSON.stringify(order));
     }
   };
@@ -90,15 +90,17 @@ function Order() {
               />
             } 
           />
-          <Route path='/checkout' element={<Checkout />} />
+          <Route path='/checkout' element={<Checkout order={order} getTotalCost={getTotalCost} />} />
         </Routes>
       </div>
       {
         location.pathname !== '/order/checkout' ?
         <OrderBottomBar 
           order={order}
+          handleChange={handleChange}
           getTotalCost={getTotalCost}
           getTotalOrderItems={getTotalOrderItems}
+          saveOrderTolocalStorage={saveOrderTolocalStorage}
         /> :
         <></>
       }

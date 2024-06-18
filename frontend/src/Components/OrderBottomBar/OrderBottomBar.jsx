@@ -4,7 +4,7 @@ import { ShopContext } from '../../Context/ShopContext'
 import { useLocation, useNavigate } from 'react-router-dom';
 import ModalViewList from '../ModalViewList/ModalViewList';
 
-function OrderBottomBar({ order, getTotalCost, getTotalOrderItems }) {
+function OrderBottomBar({ order, handleChange, getTotalCost, getTotalOrderItems, saveOrderTolocalStorage }) {
   const { formatPrice } = useContext(ShopContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,6 +29,7 @@ function OrderBottomBar({ order, getTotalCost, getTotalOrderItems }) {
 
       if (resData.success) {
         let orderId = resData.data.orderId
+        handleChange('id', orderId);
 
         if (order.payment_modal === 'VNPAY') {
           const response = await axios.post('http://localhost:4000/pay/vnpay/create_payment_url', {
@@ -44,6 +45,7 @@ function OrderBottomBar({ order, getTotalCost, getTotalOrderItems }) {
         }
 
         // Chuyển đến trang Checkout thông báo đặt hàng thành công
+        saveOrderTolocalStorage({...order, id: orderId});
         navigate('/order/checkout')
       }
     } catch (error) {
