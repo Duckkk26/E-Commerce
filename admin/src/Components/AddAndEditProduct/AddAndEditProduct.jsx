@@ -35,7 +35,7 @@ function AddAndEditProduct({ mode }) {
     const [colors, setColors] = useState([newColor]);
     const [colorImages, setColorImages] = useState(Array(colors.length).fill(null));
 
-    const fetchProduct = async (req, res) => {
+    const fetchProduct = async () => {
         let resData;
         
         if (productId) {
@@ -106,6 +106,8 @@ function AddAndEditProduct({ mode }) {
         let product = productDetails;
         let colorsData = colors;
         let totalQuantity = 0;
+        let minNewPrice = colors[0].new_price;
+        let minOldPrice = colors[0].old_price;
 
         // Upload images of different colors of a product
         let formData = new FormData();
