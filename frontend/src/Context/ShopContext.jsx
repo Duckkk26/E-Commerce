@@ -12,12 +12,12 @@ function ShopContextProvider(props) {
             .then((res) => res.json())
             .then((data) => setAllProducts(data));
 
-        if (sessionStorage.getItem('auth-token')) {
+        if (localStorage.getItem('auth-token')) {
             fetch('http://localhost:4000/cart/get', {
                 method: 'GET',
                 headers: {
                     Accept: 'application/form-data',
-                    'auth-token': `${sessionStorage.getItem('auth-token')}`,
+                    'auth-token': `${localStorage.getItem('auth-token')}`,
                     'Content-Type': 'application/json'
                 }
             }).then((res) => res.json())
@@ -67,12 +67,12 @@ function ShopContextProvider(props) {
         }
         setCartItems(newCartItems)
 
-        if (sessionStorage.getItem('auth-token')) {
+        if (localStorage.getItem('auth-token')) {
             fetch('http://localhost:4000/cart/addToCart', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
-                    'auth-token': `${sessionStorage.getItem('auth-token')}`,
+                    'auth-token': `${localStorage.getItem('auth-token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -113,12 +113,12 @@ function ShopContextProvider(props) {
         }
         setCartItems(newCartItems);
 
-        if (sessionStorage.getItem('auth-token')) {
+        if (localStorage.getItem('auth-token')) {
             fetch('http://localhost:4000/cart/removeFromCart', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/form-data',
-                    'auth-token': `${sessionStorage.getItem('auth-token')}`,
+                    'auth-token': `${localStorage.getItem('auth-token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -147,12 +147,12 @@ function ShopContextProvider(props) {
         }
         setCartItems(newCartItems);
 
-        if (sessionStorage.getItem('auth-token')) {
+        if (localStorage.getItem('auth-token')) {
             fetch('http://localhost:4000/cart/deleteFromCart', {
                 method: 'DELETE',
                 headers: {
                     Accept: 'application/form-data',
-                    'auth-token': `${sessionStorage.getItem('auth-token')}`,
+                    'auth-token': `${localStorage.getItem('auth-token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -204,6 +204,14 @@ function ShopContextProvider(props) {
         return orderProducts.find(item => item.productId === product.productId && item.color === product.color);
     }
 
+    const getTotalOrderItems = () => {
+        let totalItems = 0;
+        orderProducts.forEach((product) => {
+            totalItems += Number(product.quantity);
+        })
+        return totalItems;
+    }
+
     const getTotalCost = () => {
         let totalCost = 0;
         orderProducts.forEach((product) => {
@@ -215,7 +223,7 @@ function ShopContextProvider(props) {
     const contextValue = {
         allProducts, cartItems, orderProducts, formatPrice,
         addToCart, removeFromCart, deleteFromCart, getTotalItems, 
-        addToOrder, removeFromOrder, isProductInOrder, getTotalCost
+        addToOrder, removeFromOrder, isProductInOrder, getTotalOrderItems, getTotalCost
     };
     
     return (

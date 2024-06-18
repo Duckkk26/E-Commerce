@@ -36,8 +36,8 @@ function LoginSignup() {
         const adminURL = `http://localhost:5173/?auth-token=${resData.token}`;
         window.location.replace(adminURL);
       } else {
-        sessionStorage.setItem('auth-token', resData.token);
-        sessionStorage.setItem('user', JSON.stringify(resData.userInfo));
+        localStorage.setItem('auth-token', resData.token);
+        localStorage.setItem('user', JSON.stringify(resData.userInfo));
         window.location.replace("/");
       }
     } else {
@@ -61,8 +61,8 @@ function LoginSignup() {
       });
 
     if (resData.success) {
-      sessionStorage.setItem('auth-token', resData.token);
-      sessionStorage.setItem('user', JSON.stringify(resData.userInfo));
+      localStorage.setItem('auth-token', resData.token);
+      localStorage.setItem('user', JSON.stringify(resData.userInfo));
       window.location.replace("/");
     } else {
       alert(resData.errors);
