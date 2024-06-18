@@ -9,12 +9,7 @@ import Dropdown from '../Dropdown/Dropdown';
 
 function PaymentInfo({ order, handleChange }) {
   const { formatPrice } = useContext(ShopContext);
-  const [address, setAddress] = useState({
-    street: "",
-    ward: "",
-    district: "",
-    province: ""
-  });
+  const [address, setAddress] = useState(order.address);
   
   const [provinceList, setProvinceList] = useState([])
   const [isProvinceDropdown, setIsProvinceDropdown] = useState(false)
@@ -76,10 +71,7 @@ function PaymentInfo({ order, handleChange }) {
   }, [districtID, address.district])
   
   useEffect(() => {
-    handleChange(
-      'address', 
-      `${address.street}, ${address.ward}, ${address.district}, ${address.province}`
-    )   
+    handleChange('address', address)   
   }, [address])
 
   const handleProvinceDropdown = (id, name) => {
@@ -175,7 +167,7 @@ function PaymentInfo({ order, handleChange }) {
         <div className="block-payment__wrapper">
           <div className="block-payment__main">
             <div className="payment-main__shipping payment-main__item">
-              <div className="customer-reciever">
+              <div className="customer-receiver">
                 <div className="box-input">
                   <input 
                     type="text"

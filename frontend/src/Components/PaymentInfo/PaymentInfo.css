@@ -212,7 +212,7 @@
     width: 100%;
 }
 
-.block-payment__wrapper .block-payment__main .payment-main__item .customer-reciever {
+.block-payment__wrapper .block-payment__main .payment-main__item .customer-receiver {
     align-items: center;
     display: flex;
     gap: 15px;

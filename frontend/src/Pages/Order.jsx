@@ -1,91 +1,107 @@
-import React, { useContext, useState } from 'react'
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { ShopContext } from '../Context/ShopContext'
 
 import './CSS/Order.css'
 
 import PaymentInfo from '../Components/PaymentInfo/PaymentInfo';
 import Payment from '../Components/Payment/Payment';
-import ModalViewList from '../Components/ModalViewList/ModalViewList';
+import Checkout from '../Components/Checkout/Checkout';
+import OrderNav from '../Components/OrderNav/OrderNav';
+import OrderBottomBar from '../Components/OrderBottomBar/OrderBottomBar';
 
 function Order() {
-  const { orderProducts, formatPrice, getTotalCost } = useContext(ShopContext);
-  const navigate = useNavigate();
+  const { orderProducts } = useContext(ShopContext);
   const location = useLocation();
-  const [isViewList, setIsViewList] = useState(false);
-  const user = JSON.parse(sessionStorage.getItem('user'));
-  const [order, setOrder] = useState({
-    username: user.username,
-    email: user.email,
-    customer_name: "",
-    phone: "",
-    address: "",
-    products: orderProducts,
-    note: "",
-    payment_modal: "",
-    payment_status: ""
+  const user = JSON.parse(localStorage.getItem('user'));
+  
+  // Hàm để lưu order vào localStorage
+  const saveOrderTolocalStorage = (order) => {
+    if (orderProducts.length) {
+      localStorage.setItem('order', JSON.stringify(order));
+    }
+  };
+
+  // Hàm để tải order từ localStorage
+  const loadOrderFromlocalStorage = () => {
+    const savedOrder = localStorage.getItem('order');
+    if (savedOrder && !orderProducts.length) {
+      return JSON.parse(savedOrder);
+    }
+    return null;
+  };
+
+  const [order, setOrder] = useState(() => {
+    const savedOrder = loadOrderFromlocalStorage();
+    return savedOrder || {
+      username: user.username,
+      email: user.email,
+      customer_name: "",
+      phone: "",
+      address: {
+        street: "",
+        ward: "",
+        district: "",
+        province: ""
+      },
+      products: orderProducts,
+      note: "",
+      payment_modal: ""
+    }
   })
+
+  useEffect(() => {
+    saveOrderTolocalStorage(order)
+  }, [order.products])
+
+  const getTotalOrderItems = () => {
+    let totalItems = 0;
+    order.products.forEach((product) => {
+        totalItems += Number(product.quantity);
+    })
+    return totalItems;
+  }
+
+  const getTotalCost = () => {
+    let totalCost = 0;
+    order.products.forEach((product) => {
+        totalCost += product.new_price * product.quantity
+    })
+    return totalCost;
+  }
 
   const handleChange = (name, value) => {
     setOrder({...order, [name]: value});
   }
 
-  const handleSubmit = () => {
-    if (location.pathname === '/order/payment-info') {
-      navigate('/order/payment');
-    }
-  }
-
   return (
     <div className='order'>
       <div className="order-container">
-        <div className="order-nav">
-          <div 
-            onClick={() => navigate('/order/payment-info')} 
-            className={`order-nav__item ${location.pathname === '/order/payment-info' ? 'order-nav__item--active' : ''}`}
-          >
-            <span>1. Thông tin</span>
-          </div>
-          <div 
-            onClick={() => navigate('/order/payment')} 
-            className={`order-nav__item ${location.pathname === '/order/payment' ? 'order-nav__item--active' : ''}`}
-          >
-            <span>2. Thanh toán</span>
-          </div>
-        </div>
+        {location.pathname !== '/order/checkout' ? <OrderNav /> : <></>}
         <Routes>
           <Route path='/' element={<Navigate to='/order/payment-info' />} />
           <Route path='/payment-info' element={<PaymentInfo order={order} handleChange={handleChange} />} />
-          <Route path='/payment' element={<Payment order={order} handleChange={handleChange} />} />
+          <Route path='/payment' element={
+              <Payment 
+                order={order} 
+                getTotalOrderItems={getTotalOrderItems}
+                getTotalCost={getTotalCost}
+                handleChange={handleChange} 
+              />
+            } 
+          />
+          <Route path='/checkout' element={<Checkout />} />
         </Routes>
       </div>
-      <div>
-        <div className="order-bottom-bar">
-          <div className="order-total-box">
-            <p className="order-title-temp">Tổng tiền tạm tính:</p>
-            <div className="order-price">
-              <span className="order-total">{formatPrice(getTotalCost())}</span>
-            </div>
-          </div>
-          <div className="btn-submit">
-            <button onClick={() => handleSubmit()} className="btn btn-danger">
-              {
-                location.pathname === '/order/payment-info' ? "Tiếp tục" : "Thanh toán"
-              }
-            </button>
-            {
-              (location.pathname === '/order/payment') &&
-              <div id='viewListItemInQuote'>
-                <button type="button" onClick={() => setIsViewList(true)} className="btn">
-                  Kiểm tra danh sách sản phẩm ({order.products.length})
-                </button>
-              </div>
-            }
-          </div>
-        </div>
-        <div style={{paddingTop: `${location.pathname === '/order/payment' ? '168px' : '130px'}`}}></div>
-        {isViewList && <ModalViewList products={order.products} closeViewList={() => setIsViewList(false)} />}
-      </div>
+      {
+        location.pathname !== '/order/checkout' ?
+        <OrderBottomBar 
+          order={order}
+          getTotalCost={getTotalCost}
+          getTotalOrderItems={getTotalOrderItems}
+        /> :
+        <></>
+      }
     </div>
   )
 }

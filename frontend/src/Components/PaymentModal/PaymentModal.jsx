@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import './PaymentModal.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import vnpayIcon from '../Assets/vnpay.png'
-import shipperPayment from '../Assets/shipper-payment.jpg'
+import { payment } from '../Assets/payment.js'
 import tickIcon from '../Assets/download.svg'
 
-function PaymentModal({ handlePopup }) {
+function PaymentModal({ modal, handlePopup, handlePayment }) {
+    const [paymentModal, setPaymentModal] = useState(modal);
+
+    const handelSubmit = () => {
+        handlePayment(paymentModal);
+        handlePopup();
+    }
+
   return (
     <>
         <div className="payment-overlay"></div>
@@ -22,31 +28,30 @@ function PaymentModal({ handlePopup }) {
                 <div className="payment-modal__body-main">
                     <div className="list-payment">
                         <p>Khả dụng</p>
-                        <div className="list-payment__item">
-                            <div className="payment-item__img">
-                                <img src={shipperPayment} alt="" />
-                            </div>
-                            <div className="payment-item__title">
-                                <p>Thanh toán khi nhận hàng</p>
-                            </div>
-                            <div className="payment-item__tick"></div>
-                        </div>
-                        <div className="list-payment__item list-payment__item--active">
-                            <div className="payment-item__img">
-                                <img src={vnpayIcon} alt="" />
-                            </div>
-                            <div className="payment-item__title">
-                                <p>VNPAY</p>
-                            </div>
-                            <div className="payment-item__tick">
-                                <img src={tickIcon} alt="" />
-                            </div>
-                        </div>
+                        {
+                            payment.map((payModal, index) => {
+                                return (
+                                    <div key={index} onClick={() => setPaymentModal(payModal.name)} 
+                                        className={`list-payment__item ${paymentModal === payModal.name ? "list-payment__item--active" : ''}`}
+                                    >
+                                        <div className="payment-item__img">
+                                            <img src={payModal.image} alt="" />
+                                        </div>
+                                        <div className="payment-item__title">
+                                            <p>{payModal.name}</p>
+                                        </div>
+                                        <div className="payment-item__tick">
+                                            <img src={tickIcon} alt="" />
+                                        </div> 
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
                 </div>
             </div>
             <div className="payment-modal__bottom">
-                <button disabled="disabled" className="btn btn-danger">
+                <button onClick={() => handelSubmit()} disabled={`${paymentModal === "" ? "disabled" : ""}`} className="btn btn-danger">
                     Xác nhận
                 </button>
             </div>

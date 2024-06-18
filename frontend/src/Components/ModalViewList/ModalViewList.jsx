@@ -1,11 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import './ModalViewList.css'
-import { ShopContext } from '../../Context/ShopContext'
 
-function ModalViewList({ closeViewList }) {
-  const { orderProducts } = useContext(ShopContext);
-
+function ModalViewList({ products, closeViewList }) {
   return (
     <div id='modalViewListItemInQuote_modal-outer'>
         <div
@@ -27,7 +24,7 @@ function ModalViewList({ closeViewList }) {
               </header>
               <div id="modalViewListItemInQuote_modal-body" className="modal-body">
                 {
-                  orderProducts.map((product, index) => {
+                  products.map((product, index) => {
                     return (
                       <div key={index} className="product-item">
                         <img src={product.image} alt={product.name} loading='lazy' className='product-img' />

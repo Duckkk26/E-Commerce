@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ShopContext } from '../../Context/ShopContext'
 import PaymentModal from '../PaymentModal/PaymentModal';
 
@@ -6,12 +6,23 @@ import './Payment.css'
 import paymentIcon from '../Assets/payment.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { payment } from '../Assets/payment.js'
 
-function Payment({ reciever }) {
-  const { orderProducts, formatPrice, getTotalCost } = useContext(ShopContext);
+function Payment({ order, getTotalOrderItems, getTotalCost, handleChange }) {
+  const { formatPrice } = useContext(ShopContext);
   const [isModal, setIsModal] = useState(false);
 
-  const user = JSON.parse(sessionStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user'));
+  const [paymentModal, setPaymentModal] = useState({
+    name: "Chọn phương thức thanh toán",
+    image: paymentIcon
+  })
+  useEffect(() => {
+    let modal = payment.find(item => item.name === order.payment_modal)
+    if (modal) {
+      setPaymentModal(modal)
+    }
+  }, [order.payment_modal])
 
   return (
     <>
@@ -30,7 +41,7 @@ function Payment({ reciever }) {
           <div className="info-quote__block">
             <div className="quote-block__item">
               <p className="quote-block__title">Số lượng sản phẩm</p>
-              <p className="quote-block__value">{orderProducts.length}</p>
+              <p className="quote-block__value">{getTotalOrderItems()}</p>
             </div>
             <div className="quote-block__item">
               <p className="quote-block__title">Tiền hàng (tạm tính)</p>
@@ -54,18 +65,17 @@ function Payment({ reciever }) {
         <p>Thông tin thanh toán</p>
         <div onClick={() => setIsModal(!isModal)} className="payment-quote__main">
           <div className="payment-main__img">
-            <img src={paymentIcon} alt="" />
+            <img src={paymentModal.image} alt="" />
           </div>
           <div className="payment-main__title">
-            <p>Chọn phương thức thanh toán</p>
-            <span>Nhận thêm nhiều ưu đãi tại cổng</span>
+            <p>{paymentModal.name}</p>
           </div>
           <div className="payment-main__arrow">
             <FontAwesomeIcon icon={faAngleRight} />
           </div>
         </div>
         <div className="payment-quote__modal">
-          {isModal && <PaymentModal handlePopup={() => setIsModal(!isModal)} />}
+          {isModal && <PaymentModal modal={order.payment_modal} handlePayment={(value) => handleChange('payment_modal', value)} handlePopup={() => setIsModal(!isModal)} />}
         </div>
       </div>
       <div className="address-quote">
@@ -82,11 +92,23 @@ function Payment({ reciever }) {
             </div>
             <div className="address-quote__item">
               <p className="address-quote__title">Nhận hàng tại</p>
-              <p className="address-quote__value"></p>
+              <p className="address-quote__value">
+                {
+                  order.address.province ?
+                  `${order.address.street}, ${order.address.ward}, ${order.address.district}, ${order.address.province}` :
+                  ''
+                }
+              </p>
             </div>
             <div className="address-quote__item">
               <p className="address-quote__title">Người nhận</p>
-              <p className="address-quote__value"></p>
+              <p className="address-quote__value">
+                {
+                  order.customer_name ?
+                  `${order.customer_name} - ${order.phone}` :
+                  ''
+                }
+              </p>
             </div>
           </div>
         </div>
