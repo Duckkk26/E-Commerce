@@ -1,6 +1,6 @@
-Tên dư án: Trang web thương mại điện tử bán đồ công nghệ online.
+# Tên dư án: Trang web thương mại điện tử bán đồ công nghệ online.
 
-Cách chạy dự án:
+## Cách chạy dự án:
 
 - Chạy back-end:
 
