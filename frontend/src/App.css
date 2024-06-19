@@ -6,3 +6,18 @@
   padding-top: 64px;
   position: relative;
 }
+
+.container {
+  box-sizing: border-box;
+  display: block;
+  height: 100%;
+  margin: 0 auto;
+  max-width: 1200px;
+  position: relative;
+}
+
+.body {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}

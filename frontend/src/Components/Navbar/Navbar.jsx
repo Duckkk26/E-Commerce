@@ -74,7 +74,7 @@ function Navbar() {
                     </p>
                 </div>
             </a>
-            <a className="header-item about-delivery-tracking">
+            <Link to='/order' className="header-item about-delivery-tracking">
                 <div className="box-icon">
                     <div className='my-icon'>
                         <FontAwesomeIcon icon={faTruckFast} className='fa-h-24px' />
@@ -87,7 +87,7 @@ function Navbar() {
                         đơn hàng
                     </p>
                 </div>
-            </a>
+            </Link>
             <Link className='header-item about-cart' to='/cart'>
                 <div className="box-icon">
                     <div className='my-icon'>
@@ -103,8 +103,9 @@ function Navbar() {
                     <span id="items-in-cart">{getTotalItems()}</span>
                 </div>
             </Link>
-            {localStorage.getItem('auth-token')
-                ?<div 
+            {
+                localStorage.getItem('auth-token') ?
+                <div 
                     className="login-btn"
                     onClick={() => {
                         localStorage.removeItem('auth-token');
@@ -123,8 +124,8 @@ function Navbar() {
                             <span className="title">Đăng xuất</span>
                         </div>
                     </div>
-                </div>
-                :<Link to='/login'>
+                </div> :
+                <Link to='/login'>
                     <div className="login-btn">
                         <div className="header-item about-member">
                             <div className="box-icon">

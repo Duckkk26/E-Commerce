@@ -9,11 +9,13 @@ import Home from './Pages/Home';
 import ShopCategory from './Pages/ShopCategory'
 import Product from './Pages/Product'
 import Cart from './Pages/Cart'
+import Pay from './Pages/Pay';
 import Order from './Pages/Order';
 import LoginSignup from './Pages/LoginSignup'
 
 // Import CSS
 import './App.css';
+import OrderDetail from './Components/OrderDetail/OrderDetail';
 
 function App() {
   return (
@@ -33,7 +35,11 @@ function App() {
             <Route path=':productId' element={<Product />} />
           </Route>
           <Route path='/cart' element={<Cart />} />
-          <Route path='/order/*' element={<Order />} />
+          <Route path='/pay/*' element={<Pay />} />
+          <Route path='/order' element={<Order />} />
+          <Route path='/order/order-detail' element={<OrderDetail />}>
+            <Route path=':orderId' element={<OrderDetail />} />
+          </Route>
           <Route path='/login' element={<LoginSignup />} />
         </Routes>
         <Footer />

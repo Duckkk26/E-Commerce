@@ -35,32 +35,56 @@ router.get('/all', fetchUser, async (req, res) => {
 })
 
 // API for Getting all orders of a User
-router.get('/get', fetchUser, async (req, res) => {
+router.post('/get', fetchUser, async (req, res) => {
     try {
-        let orders = await OrderModel.find({ user_id: req.user.id });
+        let orders;
+        let status = req.body.status
+        if (!status || status === "") {
+            orders = await OrderModel.find({ user_id: req.user.id });
+        } else {
+            orders = await OrderModel.find({ user_id: req.user.id, status: status });
+        }
     
         // If orders are not found, send a 404 response
         if (!orders || orders.length === 0) {
-            return res.status(404).json({
+            return res.status(200).json({
                 success: 0,
-                message: 'No orders found for this user.' 
+                message: 'No orders found.' 
             });
         }
 
         // Calculate total cost of each order
-        orders = orders.map(order => {
+        orders = await Promise.all(orders.map(async (order) => {
             let total = 0;
-            order.products.forEach(product => {
+            const orderProducts = await Promise.all(order.products.map(async (product) => {
                 total += product.price * product.quantity;
-            })
+                try {
+                    const orderProduct = await ProductModel.findOne({ id: product.productId });
+                    return {
+                        ...product.toObject(),
+                        name: orderProduct ? orderProduct.name : 'Unknown product'
+                    };
+                    } catch (productError) {
+                    console.error('Error fetching product details:', productError);
+                    return {
+                        ...product.toObject(),
+                        name: 'Error fetching product details'
+                    };
+                    }
+            }))
+
             return {
                 ...order.toObject(),
+                products: orderProducts,
                 total: total
             }
-        })
+        }))
     
         // Send the orders with a 200 status code
-        res.status(200).send(orders);
+        res.status(200).json({
+            success: 1,
+            orders: [...orders]
+        });
       } catch (error) {
         console.error('Error fetching orders:', error);
     
