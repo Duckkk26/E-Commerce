@@ -36,7 +36,11 @@ function Checkout({ order, getTotalCost }) {
                     <div className="checkout-main__details-item">
                         <p className="details-item__title">Nhận Sản Phẩm Tại</p>
                         <p className="details-item__value">
-                            {order.address.street}, {order.address.ward}, {order.address.district}, {order.address.province}
+                        {
+                            order.address.province ?
+                            `${order.address.street}, ${order.address.ward}, ${order.address.district}, ${order.address.province}` :
+                            ''
+                        }
                         </p>
                     </div>
                     <div className="checkout-main__details-item">

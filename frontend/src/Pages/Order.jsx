@@ -77,7 +77,7 @@ function Order() {
   return (
     <div className='order'>
       <div className="order-container">
-        {location.pathname !== '/order/checkout' ? <OrderNav /> : <></>}
+        {location.pathname !== '/order/checkout' && <OrderNav />}
         <Routes>
           <Route path='/' element={<Navigate to='/order/payment-info' />} />
           <Route path='/payment-info' element={<PaymentInfo order={order} handleChange={handleChange} />} />
@@ -94,15 +94,14 @@ function Order() {
         </Routes>
       </div>
       {
-        location.pathname !== '/order/checkout' ?
+        location.pathname !== '/order/checkout' &&
         <OrderBottomBar 
           order={order}
           handleChange={handleChange}
           getTotalCost={getTotalCost}
           getTotalOrderItems={getTotalOrderItems}
           saveOrderTolocalStorage={saveOrderTolocalStorage}
-        /> :
-        <></>
+        />
       }
     </div>
   )
