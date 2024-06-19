@@ -18,13 +18,13 @@ function Pay() {
   // Hàm để lưu order vào localStorage
   const saveOrderTolocalStorage = (order) => {
     if (order.products.length) {
-      localStorage.setItem('pay', JSON.stringify(order));
+      localStorage.setItem('order', JSON.stringify(order));
     }
   };
 
   // Hàm để tải order từ localStorage
   const loadOrderFromlocalStorage = () => {
-    const savedOrder = localStorage.getItem('pay');
+    const savedOrder = localStorage.getItem('order');
     if (savedOrder && !orderProducts.length) {
       return JSON.parse(savedOrder);
     }
