@@ -2,13 +2,15 @@ import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { ShopContext } from '../../Context/ShopContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 import './PaymentInfo.css'
 import Dropdown from '../Dropdown/Dropdown';
 
 function PaymentInfo({ order, handleChange }) {
   const { formatPrice } = useContext(ShopContext);
+  const [isViewList, setIsViewList] = useState(false);
+
   const [address, setAddress] = useState(order.address);
   
   const [provinceList, setProvinceList] = useState([])
@@ -101,6 +103,7 @@ function PaymentInfo({ order, handleChange }) {
         <div className="view-list__wrapper">
           {
             order.products.map((product, index) => {
+              if (index !== 0 && isViewList === false) return null
               return (
                 <div key={index} className="order-item order-item--show">
                   <img src={product.image} alt={product.name} loading='lazy' className='item__img' />
@@ -127,10 +130,17 @@ function PaymentInfo({ order, handleChange }) {
           }
         </div>
         <div className="view-list__title">
-          <button>
-            thu gọn
-            <FontAwesomeIcon icon={faAngleUp} />
-          </button>
+          {
+            !isViewList ?
+            <button onClick={() => setIsViewList(true)}>
+              {`và ${order.products && order.products.length} sản phẩm khác`}
+              <FontAwesomeIcon icon={faChevronDown} />
+            </button> :
+            <button onClick={() => setIsViewList(false)}>
+              thu gọn
+              <FontAwesomeIcon icon={faChevronUp} />
+            </button>
+          }
         </div>
       </div>
       <div className="block-customer">
