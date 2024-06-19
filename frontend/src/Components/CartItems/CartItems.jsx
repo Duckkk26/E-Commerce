@@ -129,7 +129,7 @@ function CartItems() {
                         <h3>{formatPrice(getTotalCost())}</h3>
                     </div>
                 </div>
-                <Link to='/order'>
+                <Link to='/pay'>
                     <button>
                         ĐẶT HÀNG
                     </button>

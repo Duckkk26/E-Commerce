@@ -4,7 +4,7 @@ import { ShopContext } from '../../Context/ShopContext'
 import { useLocation, useNavigate } from 'react-router-dom';
 import ModalViewList from '../ModalViewList/ModalViewList';
 
-function OrderBottomBar({ order, handleChange, getTotalCost, getTotalOrderItems, saveOrderTolocalStorage }) {
+function PayBottomBar({ order, handleChange, getTotalCost, getTotalOrderItems, saveOrderTolocalStorage }) {
   const { formatPrice } = useContext(ShopContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,7 +46,7 @@ function OrderBottomBar({ order, handleChange, getTotalCost, getTotalOrderItems,
 
         // Chuyển đến trang Checkout thông báo đặt hàng thành công
         saveOrderTolocalStorage({...order, id: orderId});
-        navigate('/order/checkout')
+        navigate('/pay/checkout')
       }
     } catch (error) {
       console.log(error);
@@ -55,17 +55,17 @@ function OrderBottomBar({ order, handleChange, getTotalCost, getTotalOrderItems,
 
   return (
     <div>
-      <div className="order-bottom-bar">
-        <div className="order-total-box">
-          <p className="order-title-temp">Tổng tiền tạm tính:</p>
-          <div className="order-price">
-              <span className="order-total">{formatPrice(getTotalCost())}</span>
+      <div className="pay-bottom-bar">
+        <div className="pay-total-box">
+          <p className="pay-title-temp">Tổng tiền tạm tính:</p>
+          <div className="pay-price">
+              <span className="pay-total">{formatPrice(getTotalCost())}</span>
           </div>
         </div>
         <div className="btn-submit">
           {
-              (location.pathname === '/order/payment-info') ?
-              <button onClick={() => navigate('/order/payment')} className="btn btn-danger">
+              (location.pathname === '/pay/payment-info') ?
+              <button onClick={() => navigate('/pay/payment')} className="btn btn-danger">
                   Tiếp tục
               </button> :
               <button onClick={() => handleCheckout()} className="btn btn-danger">
@@ -73,7 +73,7 @@ function OrderBottomBar({ order, handleChange, getTotalCost, getTotalOrderItems,
               </button>
           }
           {
-              (location.pathname === '/order/payment') &&
+              (location.pathname === '/pay/payment') &&
               <div id='viewListItemInQuote'>
                   <button type="button" onClick={() => setIsViewList(true)} className="btn">
                       Kiểm tra danh sách sản phẩm ({getTotalOrderItems()})
@@ -82,10 +82,10 @@ function OrderBottomBar({ order, handleChange, getTotalCost, getTotalOrderItems,
           }
         </div>
       </div>
-      <div style={{paddingTop: `${location.pathname === '/order/payment' ? '168px' : '130px'}`}}></div>
+      <div style={{paddingTop: `${location.pathname === '/pay/payment' ? '168px' : '130px'}`}}></div>
       {isViewList && <ModalViewList products={order.products} closeViewList={() => setIsViewList(false)} />}
     </div>
   )
 }
 
-export default OrderBottomBar
+export default PayBottomBar

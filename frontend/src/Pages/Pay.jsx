@@ -2,15 +2,15 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { ShopContext } from '../Context/ShopContext'
 
-import './CSS/Order.css'
+import './CSS/Pay.css'
 
 import PaymentInfo from '../Components/PaymentInfo/PaymentInfo';
 import Payment from '../Components/Payment/Payment';
 import Checkout from '../Components/Checkout/Checkout';
-import OrderNav from '../Components/OrderNav/OrderNav';
-import OrderBottomBar from '../Components/OrderBottomBar/OrderBottomBar';
+import PayNav from '../Components/PayNav/PayNav';
+import PayBottomBar from '../Components/PayBottomBar/PayBottomBar';
 
-function Order() {
+function Pay() {
   const { orderProducts } = useContext(ShopContext);
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem('user'));
@@ -18,13 +18,13 @@ function Order() {
   // Hàm để lưu order vào localStorage
   const saveOrderTolocalStorage = (order) => {
     if (order.products.length) {
-      localStorage.setItem('order', JSON.stringify(order));
+      localStorage.setItem('pay', JSON.stringify(order));
     }
   };
 
   // Hàm để tải order từ localStorage
   const loadOrderFromlocalStorage = () => {
-    const savedOrder = localStorage.getItem('order');
+    const savedOrder = localStorage.getItem('pay');
     if (savedOrder && !orderProducts.length) {
       return JSON.parse(savedOrder);
     }
@@ -75,11 +75,11 @@ function Order() {
   }
 
   return (
-    <div className='order'>
-      <div className="order-container">
-        {location.pathname !== '/order/checkout' && <OrderNav />}
+    <div className='pay'>
+      <div className="pay-container">
+        {location.pathname !== '/pay/checkout' && <PayNav />}
         <Routes>
-          <Route path='/' element={<Navigate to='/order/payment-info' />} />
+          <Route path='/' element={<Navigate to='/pay/payment-info' />} />
           <Route path='/payment-info' element={<PaymentInfo order={order} handleChange={handleChange} />} />
           <Route path='/payment' element={
               <Payment 
@@ -94,8 +94,8 @@ function Order() {
         </Routes>
       </div>
       {
-        location.pathname !== '/order/checkout' &&
-        <OrderBottomBar 
+        location.pathname !== '/pay/checkout' &&
+        <PayBottomBar 
           order={order}
           handleChange={handleChange}
           getTotalCost={getTotalCost}
@@ -107,4 +107,4 @@ function Order() {
   )
 }
 
-export default Order
+export default Pay
