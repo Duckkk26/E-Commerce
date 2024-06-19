@@ -17,7 +17,7 @@ router.get('/all', fetchUser, async (req, res) => {
         orders = orders.map(order => {
             let total = 0;
             order.products.forEach(product => {
-                total += product.price * product.quantity;
+                total += product.new_price * product.quantity;
             })
             return {
                 ...order.toObject(),
@@ -57,7 +57,7 @@ router.post('/get', fetchUser, async (req, res) => {
         orders = await Promise.all(orders.map(async (order) => {
             let total = 0;
             const orderProducts = await Promise.all(order.products.map(async (product) => {
-                total += product.price * product.quantity;
+                total += product.new_price * product.quantity;
                 try {
                     const orderProduct = await ProductModel.findOne({ id: product.productId });
                     return {
@@ -94,10 +94,9 @@ router.post('/get', fetchUser, async (req, res) => {
 })
 
 // API for get an Order by ID
-router.get('/get/:id', async (req, res) => {
+router.get('/get/:id', fetchUser, async (req, res) => {
     try {
         const order = await OrderModel.findById(req.params.id);
-
         // If orders are not found, send a 404 response
         if (!order) {
             return res.status(404).json({
@@ -106,10 +105,21 @@ router.get('/get/:id', async (req, res) => {
             })
         }
 
+        const user = await UserModel.findById(req.user.id);
+        // If user is not an admin or userId is wrong, send a 404 response
+        if (user.role !== "admin" && !user._id.equals(order.user_id)) {
+            return res.status(404).json({
+                success: 0,
+                message: 'User not authorized or incorrect user ID'
+            })
+        } 
+
         // Get name of each product in order and total cost of order
+        let oldTotal = 0;
         let total = 0;
         const orderProducts = await Promise.all(order.products.map(async (product) => {
-            total += product.price * product.quantity;
+            oldTotal += product.old_price * product.quantity;
+            total += product.new_price * product.quantity;
             try {
                 const orderProduct = await ProductModel.findOne({ id: product.productId });
                 return {
@@ -128,6 +138,7 @@ router.get('/get/:id', async (req, res) => {
         res.status(200).send({
             ...order.toObject(),
             products: orderProducts,
+            old_total: oldTotal,
             total: total
         })
     } catch (error) {
@@ -151,13 +162,15 @@ router.post('/add', fetchUser, async (req, res) => {
                 const color = orderProduct.colors.find(item => item.color === product.color)
                 return {
                     ...product.toObject(),
-                    price: orderProduct && color ? color.new_price : 0
+                    new_price: orderProduct && color ? color.new_price : 0,
+                    old_price: orderProduct && color ? color.old_price : 0
                 }
             } catch (productError) {
                 console.error('Error fetching product details:', productError);
                 return {
                   ...product.toObject(),
-                  price: 0
+                  new_price: 0,
+                  old_price: 0
                 };
             }
         }))

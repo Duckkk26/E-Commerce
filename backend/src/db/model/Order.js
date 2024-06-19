@@ -34,7 +34,10 @@ const OrderSchema = new Schema({
                 image: {
                     type: String
                 },
-                price: {
+                new_price: {
+                    type: Number
+                },
+                old_price: {
                     type: Number
                 },
                 quantity: {
