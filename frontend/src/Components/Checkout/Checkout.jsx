@@ -54,7 +54,7 @@ function Checkout({ order, getTotalCost }) {
                 </div>
             </div>
             <div className="checkout-buttons">
-                <button className="btn btn-danger">Kiểm tra đơn hàng</button>
+                <button onClick={() => navigate(`/order/order-detail/${order.id}`)} className="btn btn-danger">Kiểm tra đơn hàng</button>
                 <button onClick={() => navigate('/')} className="btn">Về trang chủ</button>
             </div>
         </div>

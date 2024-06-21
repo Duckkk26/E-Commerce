@@ -11,11 +11,11 @@ import Product from './Pages/Product'
 import Cart from './Pages/Cart'
 import Pay from './Pages/Pay';
 import Order from './Pages/Order';
+import OrderDetail from './Pages/OrderDetail';
 import LoginSignup from './Pages/LoginSignup'
 
 // Import CSS
 import './App.css';
-import OrderDetail from './Components/OrderDetail/OrderDetail';
 
 function App() {
   return (

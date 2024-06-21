@@ -2,6 +2,10 @@
     box-sizing: inherit;
 }
 
+.order + .footer {
+    display: none;
+}
+
 .order-page {
     margin: 0 auto;
     width: 927px;
@@ -10,16 +14,6 @@
 .order-mobile {
     padding-bottom: 60px;
     position: relative;
-}
-
-.background {
-    background-color: #f4f6f8;
-    height: 100vh;
-    width: 100vw;
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: -5;
 }
 
 .block-homepage-menu {
@@ -183,10 +177,26 @@
     justify-content: space-between;
     margin-bottom: 5px;
     margin-top: 5px;
-    margin-right: .5rem !important;
 }
 
-.block-order-item .order-item .order-item__info .info__status {
+.block-order-item .order-item .order-item__info .info__sub-title .sub-title__item {
+    border-radius: 1px;
+    box-shadow: 0 0 0 .5px #8a8a8a;
+    padding: 2px 5px;
+}
+
+.block-order-item .order-item .order-item__info .info__sub-title .sub-title__quantity {
+    color: #000;
+    display: flex;
+    font-size: 14px;
+    gap: 5px;
+}
+
+.block-order-item .order-item .order-item__info .info__sub-title .sub-title__quantity p {
+    color: #e0052b;
+}
+
+.info__status {
     display: flex;
     gap: 20px;
 }
@@ -221,7 +231,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
+    margin-top: auto;
 }
 
 .block-order-item .order-item .order-item__info .info__group .price {

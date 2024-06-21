@@ -135,7 +135,7 @@ function Order() {
                                                         </div>
                                                         <div className="order-item__info">
                                                             <div className="info__title button__order-detail">
-                                                                <span>{order.products[0].name} - {order.products[0].color}</span>
+                                                                <span onClick={() => navigate(`/order/order-detail/${order._id}`)}>{order.products[0].name} - {order.products[0].color}</span>
                                                                 <p>{moment(order.date).format('DD/MM/YYYY HH:mm')}</p>
                                                             </div>
                                                             <div style={{display: "flex", alignItems: "center"}}>
