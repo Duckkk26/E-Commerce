@@ -111,7 +111,7 @@ router.get('/vnpay_ipn', async (req, res, next) => {
             if (order) {
                 let total = 0;
                 order.products.forEach(product => {
-                    total += product.price * product.quantity;
+                    total += product.new_price * product.quantity;
                 })
                 if (total === amount) {                  //Kiểm tra số tiền thanh toán của giao dịch
                     if (order.payment_status == 0) {    

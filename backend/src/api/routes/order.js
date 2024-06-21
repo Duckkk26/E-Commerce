@@ -135,11 +135,14 @@ router.get('/get/:id', fetchUser, async (req, res) => {
               }
         }))
 
-        res.status(200).send({
-            ...order.toObject(),
-            products: orderProducts,
-            old_total: oldTotal,
-            total: total
+        res.status(200).json({
+            success: 1,
+            order: {
+                ...order.toObject(),
+                products: orderProducts,
+                old_total: oldTotal,
+                total: total
+            }
         })
     } catch (error) {
         console.error('Error fetching orders:', error);
