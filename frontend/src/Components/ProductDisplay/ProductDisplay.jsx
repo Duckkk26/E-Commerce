@@ -170,6 +170,7 @@ function ProductDisplay(props) {
                     <button 
                         onClick={() => addToCart(
                             product.id, 
+                            product.name,
                             product.colors[choosenColor].color, 
                             product.colors[choosenColor].image, 
                             product.colors[choosenColor].new_price,
