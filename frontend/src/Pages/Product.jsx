@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { ShopContext } from '../Context/ShopContext'
 import { useParams } from 'react-router-dom';
 import Breadcrumbs from '../Components/Breadcrumbs/Breadcrumbs';
@@ -13,10 +13,6 @@ function Product() {
   const {allProducts} = useContext(ShopContext);
   const {productId} = useParams();
   const product = allProducts.find((item) => item.id === Number(productId));
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  });
 
   return (
     <div className='product-container'>

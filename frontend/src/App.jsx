@@ -16,11 +16,13 @@ import LoginSignup from './Pages/LoginSignup'
 
 // Import CSS
 import './App.css';
+import ScrollToTop from './Components/ScrollToTop/ScrollToTop';
 
 function App() {
   return (
     <>
       <BrowserRouter>
+        <ScrollToTop />
         <Header />
         <div className="clear"></div>
         <Routes>
