@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ShopContext } from '../Context/ShopContext'
 import axios from 'axios'
 import moment from 'moment'
@@ -12,6 +12,7 @@ import { faArrowLeft, faChevronDown, faChevronUp } from '@fortawesome/free-solid
 
 function OrderDetail() {
   const { orderId } = useParams();
+  const navigate = useNavigate();
   const { formatPrice } = useContext(ShopContext);
   const [order, setOrder] = useState({});
   const [isProductList, setIsProductList] = useState(false);
@@ -102,7 +103,7 @@ function OrderDetail() {
                                   <div style={{flexDirection: "column"}} className="info__group">
                                     <div className="group-btn-info">
                                       <div className="btn-info">Đánh giá</div>
-                                      <div className="btn-info">Mua lại</div>
+                                      <div onClick={() => navigate(`/product/${product.productId}`)} className="btn-info">Mua lại</div>
                                     </div>
                                   </div>
                                 </div>
@@ -155,7 +156,7 @@ function OrderDetail() {
                       <p style={{fontWeight: 700}}>{formatPrice(order.total || 0)}</p>
                     </div>
                     {
-                      order.payment_status &&
+                      order.payment_status === 1 &&
                       <div className="content__item">
                         <p className="item-title">Đã thanh toán:</p>
                         <p style={{fontWeight: 700}}>{formatPrice(order.total)}</p>
@@ -163,7 +164,7 @@ function OrderDetail() {
                     }
                     <div className="content__item last-item-money">
                       <p className="item-title">Còn phải thanh toán:</p>
-                      <p style={{fontWeight: 700}}>{formatPrice(order.payment_status ? 0 : order.total)}</p>
+                      <p style={{fontWeight: 700}}>{formatPrice((1 - order.payment_status) * order.total)}</p>
                     </div>
                   </div>
                 </div>
