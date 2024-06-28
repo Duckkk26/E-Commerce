@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import './ModalViewList.css'
+import { ShopContext } from '../../Context/ShopContext'
 
 function ModalViewList({ products, closeViewList }) {
+  const { formatPrice } = useContext(ShopContext);
+
   return (
     <div id='modalViewListItemInQuote_modal-outer'>
         <div
@@ -34,8 +37,8 @@ function ModalViewList({ products, closeViewList }) {
                             <div>
                               <div className="block-box-price">
                                 <div className="box-info__box-price">
-                                  <p className="product__price--show">{product.new_price}</p>
-                                  <p className="product__price--through">{product.old_price}</p>
+                                  <p className="product__price--show">{formatPrice(product.new_price)}</p>
+                                  <p className="product__price--through">{formatPrice(product.old_price)}</p>
                                 </div>
                               </div>
                             </div>
