@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import './CSS/LoginSignup.css'
 import MenuBottomTabs from '../Components/MenuBottomTabs/MenuBottomTabs';
+import axios from 'axios';
 
 function LoginSignup() {
   const [state, setState] = useState("Login");
@@ -17,18 +18,13 @@ function LoginSignup() {
 
   const login = async () => {
     let resData;
-    await fetch('http://localhost:4000/user/login', {
-      method: 'POST',
+    await axios.post('http://localhost:4000/user/login', formData, {
       headers: {
         Accept: 'application/form-data',
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
+      }
     })
-      .then((res) => res.json())
-      .then((data) => {
-        resData = data;
-      });
+      .then((res) => resData = res.data);
 
     if (resData.success) {
       if (resData.role === "admin") {
@@ -47,18 +43,13 @@ function LoginSignup() {
 
   const signup = async () => {
     let resData;
-    await fetch('http://localhost:4000/user/signup', {
-      method: 'POST',
+    await axios.post('http://localhost:4000/user/signup', formData, {
       headers: {
         Accept: 'application/form-data',
         'Content-type': 'application/json'
-      },
-      body: JSON.stringify(formData)
+      }
     })
-      .then((res) => res.json())
-      .then((data) => {
-        resData = data;
-      });
+      .then((res) => resData = res.data);
 
     if (resData.success) {
       localStorage.setItem('auth-token', resData.token);

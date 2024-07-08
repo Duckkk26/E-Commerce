@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
 
 export const ShopContext = createContext(null);
@@ -8,20 +9,17 @@ function ShopContextProvider(props) {
     const [orderProducts, setOrderProducts] = useState([]);
 
     const fetchData = async () => {
-        await fetch('http://localhost:4000/product/all')
-            .then((res) => res.json())
-            .then((data) => setAllProducts(data));
+        await axios.get('http://localhost:4000/product/all')
+            .then((res) => setAllProducts(res.data));
 
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:4000/cart/get', {
-                method: 'GET',
+            axios.get('http://localhost:4000/cart/get', {
                 headers: {
                     Accept: 'application/form-data',
                     'auth-token': `${localStorage.getItem('auth-token')}`,
                     'Content-Type': 'application/json'
                 }
-            }).then((res) => res.json())
-            .then((data) => setCartItems(data));
+            }).then((res) => setCartItems(res.data));
         }
     }
 
@@ -68,23 +66,20 @@ function ShopContextProvider(props) {
         setCartItems(newCartItems)
 
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:4000/cart/addToCart', {
-                method: 'POST',
+            axios.post('http://localhost:4000/cart/addToCart', {
+                "productId": productId,
+                "color": color,
+                "image": image,
+                "new_price": new_price,
+                "old_price": old_price
+            }, {
                 headers: {
                     Accept: 'application/form-data',
                     'auth-token': `${localStorage.getItem('auth-token')}`,
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "productId": productId,
-                    "color": color,
-                    "image": image,
-                    "new_price": new_price,
-                    "old_price": old_price,
-                })
+                }
             })
-            .then((res) => res.json())
-            .then((data) => console.log(data));
+                .then((res) => console.log(res.data));
         }
     }
     
@@ -114,20 +109,17 @@ function ShopContextProvider(props) {
         setCartItems(newCartItems);
 
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:4000/cart/removeFromCart', {
-                method: 'POST',
+            axios.post('http://localhost:4000/cart/removeFromCart', {
+                "productId": productId,
+                "color": color
+            }, {
                 headers: {
                     Accept: 'application/form-data',
                     'auth-token': `${localStorage.getItem('auth-token')}`,
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "productId": productId,
-                    "color": color
-                })
+                }                
             })
-            .then((res) => res.json())
-            .then((data) => console.log(data));
+            .then((res) => console.log(res.data));
         }
     }
 
@@ -148,20 +140,18 @@ function ShopContextProvider(props) {
         setCartItems(newCartItems);
 
         if (localStorage.getItem('auth-token')) {
-            fetch('http://localhost:4000/cart/deleteFromCart', {
-                method: 'DELETE',
+            axios.delete('http://localhost:4000/cart/deleteFromCart', {
                 headers: {
                     Accept: 'application/form-data',
                     'auth-token': `${localStorage.getItem('auth-token')}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
+                data: {
                     "productId": productId,
                     "color": color
-                })
+                }
             })
-            .then((res) => res.json())
-            .then((data) => console.log(data));
+            .then((res) => console.log(res.data));
         }
     }
     

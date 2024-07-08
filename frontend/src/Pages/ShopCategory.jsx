@@ -9,6 +9,7 @@ import MenuBottomTabs from '../Components/MenuBottomTabs/MenuBottomTabs';
 import './CSS/ShopCategory.css'
 
 import dropdown_icon from '../Components/Assets/dropdown_icon.png'
+import axios from 'axios';
 
 function ShopCategory(props) {
   const {allProducts} = useContext(ShopContext);
@@ -30,9 +31,8 @@ function ShopCategory(props) {
   }
 
   useEffect(() => {
-    fetch(`http://localhost:4000/brand/${props.category}`)
-    .then((res) => res.json())
-    .then((data) => setBrandList(data));
+    axios.get(`http://localhost:4000/brand/${props.category}`)
+    .then((res) => setBrandList(res.data));
   }, [props.category])
 
   return (

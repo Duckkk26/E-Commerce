@@ -4,6 +4,7 @@ import Item from '../Item/Item'
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 function Popular({ category }) {
   const [popularProducts, setPopularProducts] = useState([]);
@@ -15,9 +16,8 @@ function Popular({ category }) {
   const [maxIndex, setMaxIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/product/popular/${category}`)
-      .then((res) => res.json())
-      .then((data) => setPopularProducts(data));
+    axios.get(`http://localhost:4000/product/popular/${category}`)
+      .then((res) => setPopularProducts(res.data));
 
     switch (category) {
       case 'Mobile':

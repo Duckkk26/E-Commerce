@@ -3,6 +3,7 @@ import './NewCollections.css'
 import Item from '../Item/Item'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 function NewCollections() {
   const [newCollections, setNewCollections] = useState([]);
@@ -13,9 +14,8 @@ function NewCollections() {
   const [maxIndex, setMaxIndex] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:4000/product/new')
-      .then((res) => res.json())
-      .then((data) => setNewCollections(data));
+    axios.get('http://localhost:4000/product/new')
+      .then((res) => setNewCollections(res.data));
   }, []);
 
   useEffect(() => {
