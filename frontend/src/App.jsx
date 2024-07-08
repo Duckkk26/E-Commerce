@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 
 // Import Header and Footer Components
 import Header from './Components/Header/Header';
@@ -18,7 +18,13 @@ import LoginSignup from './Pages/LoginSignup'
 import './App.css';
 import ScrollToTop from './Components/ScrollToTop/ScrollToTop';
 
+const PrivateRoute = ({ isAuthenticated }) => {
+  return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
+}
+
 function App() {
+  const isAuthenticated = localStorage.getItem('auth-token');
+
   return (
     <>
       <BrowserRouter>
@@ -37,10 +43,12 @@ function App() {
             <Route path=':productId' element={<Product />} />
           </Route>
           <Route path='/cart' element={<Cart />} />
-          <Route path='/pay/*' element={<Pay />} />
-          <Route path='/order' element={<Order />} />
-          <Route path='/order/order-detail' element={<OrderDetail />}>
-            <Route path=':orderId' element={<OrderDetail />} />
+          <Route element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
+            <Route path='/pay/*' element={<Pay />} />
+            <Route path='/order' element={<Order />} />
+            <Route path='/order/order-detail' element={<OrderDetail />}>
+              <Route path=':orderId' element={<OrderDetail />} />
+            </Route>
           </Route>
           <Route path='/login' element={<LoginSignup />} />
         </Routes>
