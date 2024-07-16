@@ -42,8 +42,8 @@ function App() {
           <Route path='/product' element={<Product />}>
             <Route path=':productId' element={<Product />} />
           </Route>
-          <Route path='/cart' element={<Cart />} />
           <Route element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
+            <Route path='/cart' element={<Cart />} />
             <Route path='/pay/*' element={<Pay />} />
             <Route path='/order' element={<Order />} />
             <Route path='/order/order-detail' element={<OrderDetail />}>

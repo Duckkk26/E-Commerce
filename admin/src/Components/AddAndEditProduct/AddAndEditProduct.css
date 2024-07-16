@@ -85,6 +85,10 @@
     font-weight: 500;
 }
 
+#description {
+    height: 200px;
+}
+
 @media (max-width: 800px) {
     .add-and-edit-product {
         width: auto;

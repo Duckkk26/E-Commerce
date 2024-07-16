@@ -129,19 +129,22 @@ function PaymentInfo({ order, handleChange }) {
             })
           }
         </div>
-        <div className="view-list__title">
-          {
-            !isViewList ?
-            <button onClick={() => setIsViewList(true)}>
-              {`và ${order.products && order.products.length} sản phẩm khác`}
-              <FontAwesomeIcon icon={faChevronDown} />
-            </button> :
-            <button onClick={() => setIsViewList(false)}>
-              thu gọn
-              <FontAwesomeIcon icon={faChevronUp} />
-            </button>
-          }
-        </div>
+        {
+          order.products.length > 1 && 
+          <div className="view-list__title">
+            {
+              !isViewList ?
+              <button onClick={() => setIsViewList(true)}>
+                {`và ${order.products.length - 1} sản phẩm khác`}
+                <FontAwesomeIcon icon={faChevronDown} />
+              </button> :
+              <button onClick={() => setIsViewList(false)}>
+                thu gọn
+                <FontAwesomeIcon icon={faChevronUp} />
+              </button>
+            }
+          </div>
+        }
       </div>
       <div className="block-customer">
         <p>Thông tin khách hàng</p>

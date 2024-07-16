@@ -39,7 +39,7 @@ function OrderDetail() {
         <div className="order-detail-mobile">
           <div className="background"></div>
           <div className="top-nav-bar">
-            <div className="navbar-container">
+            <div onClick={() => navigate('/order')} className="navbar-container">
               <div>
                 <div className="go-back-icon">
                   <FontAwesomeIcon icon={faArrowLeft} />
@@ -162,10 +162,13 @@ function OrderDetail() {
                         <p style={{fontWeight: 700}}>{formatPrice(order.total)}</p>
                       </div>
                     }
-                    <div className="content__item last-item-money">
-                      <p className="item-title">Còn phải thanh toán:</p>
-                      <p style={{fontWeight: 700}}>{formatPrice((1 - order.payment_status) * order.total)}</p>
-                    </div>
+                    {
+                      order.payment_status === 0 &&
+                      <div className="content__item last-item-money">
+                        <p className="item-title">Còn phải thanh toán:</p>
+                        <p style={{fontWeight: 700}}>{formatPrice((1 - order.payment_status) * order.total)}</p>
+                      </div>
+                    }
                   </div>
                 </div>
                 <div className="payment-info customer">
