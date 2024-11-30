@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ShopContext } from '../../Context/ShopContext'
 import { useLocation, useNavigate } from 'react-router-dom';
 import ModalViewList from '../ModalViewList/ModalViewList';
+import { API_BASE_URL } from '../../apiConfig';
 
 function PayBottomBar({ order, handleChange, getTotalCost, getTotalOrderItems, saveOrderTolocalStorage }) {
   const { formatPrice } = useContext(ShopContext);
@@ -14,7 +15,7 @@ function PayBottomBar({ order, handleChange, getTotalCost, getTotalOrderItems, s
     try {
       let resData;
 
-      await axios.post('http://localhost:4000/order/add', {
+      await axios.post(`${API_BASE_URL}/order/add`, {
         ...order,
         address: `${order.address.street}, ${order.address.ward}, ${order.address.district}, ${order.address.province}`
       }, {
@@ -32,7 +33,7 @@ function PayBottomBar({ order, handleChange, getTotalCost, getTotalOrderItems, s
         handleChange('id', orderId);
 
         if (order.payment_modal === 'VNPAY') {
-          const response = await axios.post('http://localhost:4000/pay/vnpay/create_payment_url', {
+          const response = await axios.post(`${API_BASE_URL}/pay/vnpay/create_payment_url`, {
             orderId: orderId,
             amount: getTotalCost(),
             orderType: 110000

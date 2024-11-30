@@ -9,6 +9,7 @@ import paymentIcon from '../Components/Assets/payment.png'
 import customerIcon from '../Components/Assets/customer_icon.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { API_BASE_URL } from '../apiConfig'
 
 function OrderDetail() {
   const { orderId } = useParams();
@@ -18,7 +19,7 @@ function OrderDetail() {
   const [isProductList, setIsProductList] = useState(false);
 
   const fetchOrder = async () => {
-    const response = await axios.get(`http://localhost:4000/order/get/${orderId}`, {
+    const response = await axios.get(`${API_BASE_URL}/order/get/${orderId}`, {
       headers: {
         'auth-token': `${localStorage.getItem('auth-token')}`
       }

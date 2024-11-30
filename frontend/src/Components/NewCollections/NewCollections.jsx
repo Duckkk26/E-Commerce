@@ -4,6 +4,7 @@ import Item from '../Item/Item'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { API_BASE_URL } from '../../apiConfig';
 
 function NewCollections() {
   const [newCollections, setNewCollections] = useState([]);
@@ -14,7 +15,7 @@ function NewCollections() {
   const [maxIndex, setMaxIndex] = useState(0);
 
   useEffect(() => {
-    axios.get('http://localhost:4000/product/new')
+    axios.get(`${API_BASE_URL}/product/new`)
       .then((res) => setNewCollections(res.data));
   }, []);
 

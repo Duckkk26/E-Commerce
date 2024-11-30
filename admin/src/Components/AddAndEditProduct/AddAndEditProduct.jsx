@@ -8,6 +8,7 @@ import './AddAndEditProduct.css'
 import uploadArea from '../../assets/upload_area.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquarePlus } from '@fortawesome/free-solid-svg-icons'
+import { API_BASE_URL } from '../../../../frontend/src/apiConfig';
 
 function AddAndEditProduct({ mode }) {
     const {productId} = useParams();
@@ -39,7 +40,7 @@ function AddAndEditProduct({ mode }) {
         let resData;
         
         if (productId) {
-            await fetch(`http://localhost:4000/product/get/${productId}`)
+            await fetch(`${API_BASE_URL}/product/get/${productId}`)
             .then(res => res.json())
             .then(data => resData = data);
 
@@ -115,7 +116,7 @@ function AddAndEditProduct({ mode }) {
             formData.append('color', image);
         });
 
-        await fetch('http://localhost:4000/upload', {
+        await fetch(`${API_BASE_URL}/upload`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json'
@@ -142,7 +143,7 @@ function AddAndEditProduct({ mode }) {
             formData.append('product', image);
         });
 
-        await fetch('http://localhost:4000/upload', {
+        await fetch(`${API_BASE_URL}/upload`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json'
@@ -161,7 +162,7 @@ function AddAndEditProduct({ mode }) {
             product.old_price = minOldPrice;
             product.colors = colorsData;
             product.total_quantity = totalQuantity;
-            await fetch('http://localhost:4000/product/add', {
+            await fetch(`${API_BASE_URL}/product/add`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -205,7 +206,7 @@ function AddAndEditProduct({ mode }) {
             formData.append('color', image);
         });
 
-        await fetch('http://localhost:4000/upload', {
+        await fetch(`${API_BASE_URL}/upload`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json'
@@ -239,7 +240,7 @@ function AddAndEditProduct({ mode }) {
             formData.append('product', image);
         });
 
-        await fetch('http://localhost:4000/upload', {
+        await fetch(`${API_BASE_URL}/upload`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json'
@@ -258,7 +259,7 @@ function AddAndEditProduct({ mode }) {
             product.old_price = minOldPrice;
             product.colors = colorsData;
             product.total_quantity = totalQuantity;
-            await fetch('http://localhost:4000/product/update', {
+            await fetch(`${API_BASE_URL}/product/update`, {
                 method: 'PATCH',
                 headers: {
                     Accept: 'application/json',

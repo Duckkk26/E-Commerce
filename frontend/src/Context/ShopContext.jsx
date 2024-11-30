@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
+import { API_BASE_URL } from "../apiConfig";
 
 export const ShopContext = createContext(null);
 
@@ -9,11 +10,11 @@ function ShopContextProvider(props) {
     const [orderProducts, setOrderProducts] = useState([]);
 
     const fetchData = async () => {
-        await axios.get('http://localhost:4000/product/all')
+        await axios.get(`${API_BASE_URL}/product/all`)
             .then((res) => setAllProducts(res.data));
 
         if (localStorage.getItem('auth-token')) {
-            axios.get('http://localhost:4000/cart/get', {
+            axios.get(`${API_BASE_URL}/cart/get`, {
                 headers: {
                     Accept: 'application/form-data',
                     'auth-token': `${localStorage.getItem('auth-token')}`,
@@ -66,7 +67,7 @@ function ShopContextProvider(props) {
         setCartItems(newCartItems)
 
         if (localStorage.getItem('auth-token')) {
-            axios.post('http://localhost:4000/cart/addToCart', {
+            axios.post(`${API_BASE_URL}/cart/addToCart`, {
                 "productId": productId,
                 "color": color,
                 "image": image,
@@ -109,7 +110,7 @@ function ShopContextProvider(props) {
         setCartItems(newCartItems);
 
         if (localStorage.getItem('auth-token')) {
-            axios.post('http://localhost:4000/cart/removeFromCart', {
+            axios.post(`${API_BASE_URL}/cart/removeFromCart`, {
                 "productId": productId,
                 "color": color
             }, {
@@ -140,7 +141,7 @@ function ShopContextProvider(props) {
         setCartItems(newCartItems);
 
         if (localStorage.getItem('auth-token')) {
-            axios.delete('http://localhost:4000/cart/deleteFromCart', {
+            axios.delete(`${API_BASE_URL}/cart/deleteFromCart`, {
                 headers: {
                     Accept: 'application/form-data',
                     'auth-token': `${localStorage.getItem('auth-token')}`,

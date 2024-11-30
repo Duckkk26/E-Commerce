@@ -10,6 +10,7 @@ import './CSS/ShopCategory.css'
 
 import dropdown_icon from '../Components/Assets/dropdown_icon.png'
 import axios from 'axios';
+import { API_BASE_URL } from '../apiConfig';
 
 function ShopCategory(props) {
   const {allProducts} = useContext(ShopContext);
@@ -31,7 +32,7 @@ function ShopCategory(props) {
   }
 
   useEffect(() => {
-    axios.get(`http://localhost:4000/brand/${props.category}`)
+    axios.get(`${API_BASE_URL}/brand/${props.category}`)
     .then((res) => setBrandList(res.data));
   }, [props.category])
 

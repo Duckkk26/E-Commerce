@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import './CSS/LoginSignup.css'
 import MenuBottomTabs from '../Components/MenuBottomTabs/MenuBottomTabs';
 import axios from 'axios';
+import { API_BASE_URL } from '../apiConfig';
 
 function LoginSignup() {
   const [state, setState] = useState("Login");
@@ -18,7 +19,7 @@ function LoginSignup() {
 
   const login = async () => {
     let resData;
-    await axios.post('http://localhost:4000/user/login', formData, {
+    await axios.post(`${API_BASE_URL}/user/login`, formData, {
       headers: {
         Accept: 'application/form-data',
         'Content-Type': 'application/json'
@@ -43,7 +44,7 @@ function LoginSignup() {
 
   const signup = async () => {
     let resData;
-    await axios.post('http://localhost:4000/user/signup', formData, {
+    await axios.post(`${API_BASE_URL}/user/signup`, formData, {
       headers: {
         Accept: 'application/form-data',
         'Content-type': 'application/json'

@@ -5,6 +5,7 @@ import axios from 'axios'
 import moment from 'moment'
 
 import './CSS/Order.css'
+import { API_BASE_URL } from '../apiConfig';
 
 function Order() {
     const { formatPrice } = useContext(ShopContext);
@@ -14,7 +15,7 @@ function Order() {
     const navigate = useNavigate();
 
     const fetchAllOrders = async () => {
-        const response = await axios.post('http://localhost:4000/order/get', {
+        const response = await axios.post(`${API_BASE_URL}/order/get`, {
             status: status
         }, {
             headers: {
@@ -46,7 +47,7 @@ function Order() {
     const handleCheckout = async (order) => {
         try {    
             if (order.payment_modal === 'VNPAY') {
-              const response = await axios.post('http://localhost:4000/pay/vnpay/create_payment_url', {
+              const response = await axios.post(`${API_BASE_URL}/pay/vnpay/create_payment_url`, {
                 orderId: order._id,
                 amount: order.total,
                 orderType: 110000
