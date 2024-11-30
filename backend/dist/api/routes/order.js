@@ -1,16 +1,4 @@
-"use strict";
-
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.router = void 0;
-var _express = _interopRequireDefault(require("express"));
-var _Order = _interopRequireDefault(require("../../db/model/Order.js"));
-var _fetchUserFromToken = require("../middleware/fetchUserFromToken.js");
-var _User = _interopRequireDefault(require("../../db/model/User.js"));
-var _Product = _interopRequireDefault(require("../../db/model/Product.js"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -25,17 +13,22 @@ function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" 
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
-var router = exports.router = _express["default"].Router();
+import express from 'express';
+import OrderModel from '../../db/model/Order.js';
+import { fetchUser } from '../middleware/fetchUserFromToken.js';
+import UserModel from '../../db/model/User.js';
+import ProductModel from '../../db/model/Product.js';
+var router = express.Router();
 
 // API for Getting all orders for Admin
-router.get('/all', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
+router.get('/all', fetchUser, /*#__PURE__*/function () {
   var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
     var user, orders;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
-          return _User["default"].findById(req.user.id);
+          return UserModel.findById(req.user.id);
         case 2:
           user = _context.sent;
           if (!(user.role === "admin")) {
@@ -43,7 +36,7 @@ router.get('/all', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
             break;
           }
           _context.next = 6;
-          return _Order["default"].find({});
+          return OrderModel.find({});
         case 6:
           orders = _context.sent;
           // Calculate total cost of each order
@@ -76,7 +69,7 @@ router.get('/all', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
 }());
 
 // API for Getting all orders of a User
-router.post('/get', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
+router.post('/get', fetchUser, /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req, res) {
     var orders, status;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
@@ -89,7 +82,7 @@ router.post('/get', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
             break;
           }
           _context4.next = 5;
-          return _Order["default"].find({
+          return OrderModel.find({
             user_id: req.user.id
           });
         case 5:
@@ -98,7 +91,7 @@ router.post('/get', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
           break;
         case 8:
           _context4.next = 10;
-          return _Order["default"].find({
+          return OrderModel.find({
             user_id: req.user.id,
             status: status
           });
@@ -132,7 +125,7 @@ router.post('/get', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
                               total += product.new_price * product.quantity;
                               _context2.prev = 1;
                               _context2.next = 4;
-                              return _Product["default"].findOne({
+                              return ProductModel.findOne({
                                 id: product.productId
                               });
                             case 4:
@@ -203,7 +196,7 @@ router.post('/get', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
 }());
 
 // API for get an Order by ID
-router.get('/get/:id', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
+router.get('/get/:id', fetchUser, /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(req, res) {
     var order, user, oldTotal, total, orderProducts;
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
@@ -211,7 +204,7 @@ router.get('/get/:id', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
         case 0:
           _context6.prev = 0;
           _context6.next = 3;
-          return _Order["default"].findById(req.params.id);
+          return OrderModel.findById(req.params.id);
         case 3:
           order = _context6.sent;
           if (order) {
@@ -224,7 +217,7 @@ router.get('/get/:id', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
           }));
         case 6:
           _context6.next = 8;
-          return _User["default"].findById(req.user.id);
+          return UserModel.findById(req.user.id);
         case 8:
           user = _context6.sent;
           if (!(user.role !== "admin" && !user._id.equals(order.user_id))) {
@@ -250,7 +243,7 @@ router.get('/get/:id', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
                     total += product.new_price * product.quantity;
                     _context5.prev = 2;
                     _context5.next = 5;
-                    return _Product["default"].findOne({
+                    return ProductModel.findOne({
                       id: product.productId
                     });
                   case 5:
@@ -306,14 +299,14 @@ router.get('/get/:id', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
     return _ref5.apply(this, arguments);
   };
 }());
-router.post('/add', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
+router.post('/add', fetchUser, /*#__PURE__*/function () {
   var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8(req, res) {
     var newOrder;
     return _regeneratorRuntime().wrap(function _callee8$(_context8) {
       while (1) switch (_context8.prev = _context8.next) {
         case 0:
           _context8.prev = 0;
-          newOrder = new _Order["default"](_objectSpread({
+          newOrder = new OrderModel(_objectSpread({
             user_id: req.user.id
           }, req.body));
           _context8.next = 4;
@@ -325,7 +318,7 @@ router.post('/add', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
                   case 0:
                     _context7.prev = 0;
                     _context7.next = 3;
-                    return _Product["default"].findOne({
+                    return ProductModel.findOne({
                       id: product.productId
                     });
                   case 3:
@@ -388,3 +381,4 @@ router.post('/add', _fetchUserFromToken.fetchUser, /*#__PURE__*/function () {
     return _ref7.apply(this, arguments);
   };
 }());
+export { router };

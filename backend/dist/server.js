@@ -1,31 +1,28 @@
-"use strict";
-
-var _express = _interopRequireDefault(require("express"));
-var _multer = _interopRequireDefault(require("multer"));
-var _cors = _interopRequireDefault(require("cors"));
-var _dotenv = _interopRequireDefault(require("dotenv"));
-var _path = _interopRequireDefault(require("path"));
-var _uuid = require("uuid");
-var _index = require("./api/routes/index.js");
-var _connect = _interopRequireDefault(require("./db/connect.js"));
-var _url = require("url");
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
-var app = (0, _express["default"])();
-app.use(_express["default"].json());
-app.use((0, _cors["default"])());
-(0, _index.route)(app);
+import express from "express";
+import multer from 'multer';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { route } from "./api/routes/index.js";
+import connection from "./db/connect.js";
+import { fileURLToPath } from 'url';
+var app = express();
+app.use(express.json());
+app.use(cors());
+route(app);
 
 // Chuyển đổi `import.meta.url` thành __dirname
-var _filename = (0, _url.fileURLToPath)(import.meta.url);
-var _dirname = _path["default"].dirname(_filename);
+var __filename = fileURLToPath(import.meta.url);
+var __dirname = path.dirname(__filename);
 
 // Cấu hình để phục vụ tệp tĩnh từ thư mục "public"
-app.use(_express["default"]["static"](_path["default"].join(_dirname, '../public')));
+app.use(express["static"](path.join(__dirname, '../public')));
 
 // Cấu hình view engine
 app.set('view engine', 'ejs');
-app.set('views', _path["default"].join(_dirname, '../views'));
-_dotenv["default"].config();
+app.set('views', path.join(__dirname, '../views'));
+dotenv.config();
 var port = process.env.PORT;
 
 // API Creation
@@ -34,19 +31,19 @@ app.get("/", function (req, res) {
 });
 
 // Image Storage Engine
-var storage = _multer["default"].diskStorage({
+var storage = multer.diskStorage({
   destination: './upload/images',
   filename: function filename(req, file, cb) {
-    var uniqueFilename = "".concat((0, _uuid.v4)()).concat(_path["default"].extname(file.originalname));
+    var uniqueFilename = "".concat(uuidv4()).concat(path.extname(file.originalname));
     return cb(null, uniqueFilename);
   }
 });
-var upload = (0, _multer["default"])({
+var upload = multer({
   storage: storage
 });
 
 // Creating upload endpoint for images
-app.use('/images', _express["default"]["static"]('upload/images'));
+app.use('/images', express["static"]('upload/images'));
 app.post("/upload", upload.any(), function (req, res) {
   var fileNames = req.files.map(function (file) {
     return file.filename;
@@ -58,7 +55,7 @@ app.post("/upload", upload.any(), function (req, res) {
     })
   });
 });
-_connect["default"].then(function () {
+connection.then(function () {
   app.listen(port, function (error) {
     if (!error) {
       console.log("Server is running on port ".concat(port, ". http://localhost:").concat(port));
