@@ -6,4 +6,5 @@ module.exports = {
   plugins: [
     "@babel/plugin-proposal-object-rest-spread", // Enables the spread operator in objects
   ],
+  sourceType: "module",
 };
